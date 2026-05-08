@@ -1,0 +1,5 @@
+{
+  "server_ip": "203.0.113.10",
+  "server_port": 6000,
+  "_comment": "server_ip는 DigitalOcean droplet의 공인 IPv4 주소로 교체하세요. 사용자가 .app 내부 Contents/Resources/config.json을 직접 편집해도 됩니다."
+}

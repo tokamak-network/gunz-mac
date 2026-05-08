@@ -1,0 +1,30 @@
+# build artifacts
+dist/
+build/
+
+# logs
+*.log
+
+# OS
+.DS_Store
+Thumbs.db
+
+# editors
+.vscode/
+.idea/
+
+# node
+node_modules/
+.next/
+out/
+
+# python
+__pycache__/
+*.pyc
+
+# wine prefixes
+wineprefix/
+
+# secrets
+.env
+.env.*.local

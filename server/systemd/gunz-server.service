@@ -1,0 +1,19 @@
+[Unit]
+Description=GunZ MatchServer (RefinedGunz)
+After=network-online.target
+Wants=network-online.target
+
+[Service]
+Type=simple
+User=gunz
+Group=gunz
+WorkingDirectory=/opt/gunz/server
+ExecStart=/opt/gunz/run-server.sh
+Restart=on-failure
+RestartSec=5
+StandardOutput=append:/var/log/gunz-server.log
+StandardError=append:/var/log/gunz-server.log
+Environment=HOME=/home/gunz
+
+[Install]
+WantedBy=multi-user.target

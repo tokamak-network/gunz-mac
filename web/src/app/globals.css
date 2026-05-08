@@ -1,0 +1,44 @@
+:root {
+  color-scheme: dark;
+  --bg: #07090d;
+  --bg-2: #0f131b;
+  --fg: #e8edf5;
+  --muted: #8a93a4;
+  --accent: #ff5b3d;
+  --accent-2: #ffd166;
+  --line: #1c2230;
+}
+
+* { box-sizing: border-box; }
+html, body { padding: 0; margin: 0; }
+body {
+  font: 16px/1.6 -apple-system, BlinkMacSystemFont, "SF Pro Text",
+        "Helvetica Neue", "Apple SD Gothic Neo", system-ui, sans-serif;
+  color: var(--fg);
+  background:
+    radial-gradient(1200px 800px at 80% -10%, rgba(255,91,61,.12), transparent 60%),
+    radial-gradient(1000px 700px at -10% 110%, rgba(255,209,102,.06), transparent 60%),
+    var(--bg);
+  min-height: 100dvh;
+  -webkit-font-smoothing: antialiased;
+}
+
+a { color: var(--fg); }
+code {
+  font-family: "SF Mono", ui-monospace, Menlo, Consolas, monospace;
+  background: var(--bg-2);
+  padding: 2px 6px;
+  border-radius: 6px;
+  border: 1px solid var(--line);
+  font-size: 0.9em;
+}
+pre {
+  font-family: "SF Mono", ui-monospace, Menlo, Consolas, monospace;
+  background: var(--bg-2);
+  padding: 16px;
+  border-radius: 10px;
+  border: 1px solid var(--line);
+  overflow-x: auto;
+  font-size: 13px;
+  line-height: 1.55;
+}
