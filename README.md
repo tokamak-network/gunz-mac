@@ -1,103 +1,103 @@
 # GunZ Mac
 
-macOS Apple Silicon에서 GunZ: The Duel(RefinedGunz)을 실행하기 위한 패키지·서버·랜딩 페이지 모음입니다.
+A package, server, and landing page bundle for running GunZ: The Duel (RefinedGunz) on macOS Apple Silicon.
 
-## 구성
+## Layout
 
 ```
 gunz-mac/
-├─ server/          # Linux VPS 서버 배포 스크립트
-├─ client/launcher/ # .app 안에 들어가는 런처와 TCP 포워더
-├─ packaging/       # GunZ Mac.app 빌드 스크립트
-├─ web/             # Vercel에 배포하는 다운로드 랜딩 페이지 (Next.js)
-└─ docs/            # 사용자/운영자용 가이드
+├─ server/          # Linux VPS deployment scripts
+├─ client/launcher/ # In-app launcher and TCP forwarder
+├─ packaging/       # GunZ Mac.app build script
+├─ web/             # Download landing page deployed to Vercel (Next.js)
+└─ docs/            # User and operator guides
 ```
 
-## 빠르게 시작하기 (개요)
+## Quick Start (overview)
 
-1. **서버 구축** — DigitalOcean droplet에 `server/install.sh`를 실행해 MatchServer를 띄웁니다.
-2. **.app 빌드** — `packaging/build-app.sh --server-ip <DROPLET_IP>`로 self-contained `GunZ Mac.app`을 만듭니다.
-3. **GitHub Releases 업로드** — 생성된 `.zip`을 `gh release create`로 업로드합니다.
-4. **랜딩 페이지 배포** — `web/`을 Vercel에 연결하고 다운로드 링크를 노출합니다.
+1. **Stand up the server** — run `server/install.sh` on a DigitalOcean droplet to bring up MatchServer.
+2. **Build the .app** — run `packaging/build-app.sh --server-ip <DROPLET_IP>` to produce a self-contained `GunZ Mac.app`.
+3. **Upload to GitHub Releases** — push the generated `.zip` with `gh release create`.
+4. **Deploy the landing page** — connect `web/` to Vercel and surface the download link.
 
-자세한 단계는 [docs/digitalocean-setup.md](docs/digitalocean-setup.md)와 아래 설명을 따르세요.
+For step-by-step instructions see [docs/digitalocean-setup.md](docs/digitalocean-setup.md) and the sections below.
 
-## 1. 서버 (Linux VPS)
+## 1. Server (Linux VPS)
 
-`server/install.sh`는 Ubuntu 22.04 droplet에서 다음 작업을 자동으로 처리합니다.
+`server/install.sh` automates the following on an Ubuntu 22.04 droplet:
 
-- WineHQ-stable 설치
-- `gunz` 시스템 사용자 생성
-- RefinedGunz 서버 자산 다운로드(`/opt/gunz/server`)
-- `server.ini` 기본 설정 작성 (test 모드, 안티치트 OFF)
-- systemd 서비스 등록 (`gunz-server`)
-- ufw 방화벽 규칙 (TCP 6000, UDP 7700-7800)
+- Installs WineHQ-stable
+- Creates the `gunz` system user
+- Downloads RefinedGunz server assets to `/opt/gunz/server`
+- Writes a default `server.ini` (test mode, anti-cheat OFF)
+- Registers a systemd service (`gunz-server`)
+- Configures ufw firewall rules (TCP 6000, UDP 7700-7800)
 
 ```bash
-# DigitalOcean droplet (Ubuntu 22.04)에서
+# On a DigitalOcean droplet (Ubuntu 22.04)
 git clone https://github.com/<YOUR>/gunz-mac.git
 cd gunz-mac/server
 sudo ./install.sh
 ```
 
-운영 명령:
+Operational commands:
 ```bash
 systemctl status gunz-server
 journalctl -u gunz-server -f
 sudo systemctl restart gunz-server
 ```
 
-## 2. macOS 클라이언트 패키징
+## 2. macOS Client Packaging
 
-`packaging/build-app.sh`가 다음 항목을 하나의 `.app`으로 묶습니다.
+`packaging/build-app.sh` bundles the following into a single `.app`:
 
-- Wine 11.0 (Mac용, 약 666MB)
-- RefinedGunz 클라이언트 (Gunz.exe + 자산, 약 277MB)
-- 런처 셸 스크립트와 Python TCP 포워더
-- 사용자 서버 IP가 적힌 `config.json`
+- Wine 11.0 (macOS build, ~666 MB)
+- RefinedGunz client (Gunz.exe + assets, ~277 MB)
+- Launcher shell script and Python TCP forwarder
+- A `config.json` containing the user's server IP
 
 ```bash
 ./packaging/build-app.sh \
   --server-ip 203.0.113.10 \
   --server-port 6000 \
   --version 0.1.0
-# 결과: dist/GunZ Mac.app, dist/GunZ-Mac-0.1.0.zip
+# Output: dist/GunZ Mac.app, dist/GunZ-Mac-0.1.0.zip
 ```
 
-`Gunz.exe`가 서버 주소를 `127.0.0.1`로 하드코딩해 두었기 때문에, 런처가 실행 시 `127.0.0.1:6000` → `<서버IP>:6000`으로 트래픽을 중계하는 작은 Python TCP 포워더를 띄웁니다.
+`Gunz.exe` hardcodes the server address to `127.0.0.1`, so on launch the bundle starts a small Python TCP forwarder that relays `127.0.0.1:6000` → `<SERVER_IP>:6000`.
 
-## 3. GitHub Releases 업로드
+## 3. GitHub Releases Upload
 
 ```bash
 gh release create v0.1.0 dist/GunZ-Mac-0.1.0.zip \
   --title "GunZ Mac v0.1.0" \
-  --notes "macOS Apple Silicon 패키지"
+  --notes "macOS Apple Silicon package"
 ```
 
-## 4. Vercel 랜딩 페이지
+## 4. Vercel Landing Page
 
-`web/`은 Next.js 16 프로젝트입니다. Vercel 대시보드에서 GitHub repo를 import하면 자동 배포됩니다.
+`web/` is a Next.js 16 project. Importing the GitHub repo from the Vercel dashboard is enough to trigger automatic deployment.
 
-환경변수:
-- `NEXT_PUBLIC_GITHUB_OWNER` — 자신의 GitHub 사용자/조직
-- `NEXT_PUBLIC_GITHUB_REPO` — 보통 `gunz-mac`
-- `NEXT_PUBLIC_RELEASE_TAG` — 예: `v0.1.0`
-- `NEXT_PUBLIC_ZIP_NAME` — 예: `GunZ-Mac-0.1.0.zip`
+Environment variables:
+- `NEXT_PUBLIC_GITHUB_OWNER` — your GitHub user or org
+- `NEXT_PUBLIC_GITHUB_REPO` — usually `gunz-mac`
+- `NEXT_PUBLIC_RELEASE_TAG` — e.g. `v0.1.0`
+- `NEXT_PUBLIC_ZIP_NAME` — e.g. `GunZ-Mac-0.1.0.zip`
 
-로컬 미리보기:
+Local preview:
 ```bash
 cd web
 npm install
 npm run dev
 ```
 
-## 5. 알려진 제약과 면책
+## 5. Known Limitations and Disclaimer
 
-- 서버는 **test 모드**로 동작합니다. 인증/티켓/안티치트는 모두 꺼져 있습니다.
-- RefinedGunz v0.6.0(2018년 빌드)을 기반으로 하므로 일부 자산이 누락된 메시지가 로그에 보일 수 있습니다 (게임 동작에는 영향 없음).
-- macOS 코드 서명을 하지 않았으므로 Gatekeeper가 첫 실행을 막습니다 — 우클릭 → 열기로 우회.
-- GunZ는 MAIET Entertainment의 상표입니다. 본 패키지는 RefinedGunz 커뮤니티 포크의 공개 빌드를 사용합니다.
+- The server runs in **test mode**. Authentication, ticketing, and anti-cheat are all disabled.
+- The build is based on RefinedGunz v0.6.0 (2018), so a few "missing asset" messages may appear in the logs (gameplay is not affected).
+- The macOS bundle is unsigned, so Gatekeeper will block the first launch — right-click → Open to bypass.
+- GunZ is a trademark of MAIET Entertainment. This package uses public builds of the community-maintained RefinedGunz fork.
 
-## 라이선스
+## License
 
-이 저장소의 스크립트와 웹사이트 코드는 자유롭게 수정/재배포 가능합니다. 동봉되는 GunZ/RefinedGunz 자산의 권리는 각 저작권자에게 있습니다.
+Scripts and website code in this repository are free to modify and redistribute. Rights to the bundled GunZ / RefinedGunz assets remain with their respective copyright holders.
