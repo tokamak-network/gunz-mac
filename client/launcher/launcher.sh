@@ -54,32 +54,34 @@ if [[ ! -f "$WINEPREFIX/system.reg" ]]; then
 fi
 
 # 포워더 시작: TCP 6000 (MatchServer) + UDP 8900 (Locator)
-FWD_PIDS=()
+# bash 3.2 (macOS default) 호환: 음수 인덱스 사용 금지, 빈 배열 확장 시 unset 트릭 사용
+TCP_FWD_PID=""
+UDP_FWD_PID=""
 if [[ "$SERVER_IP" != "127.0.0.1" && "$SERVER_IP" != "localhost" ]]; then
   /usr/bin/python3 "$FORWARDER" --proto tcp \
     --listen "127.0.0.1:$SERVER_PORT" \
     --upstream "$SERVER_IP:$SERVER_PORT" \
     >>"$LOG_DIR/forwarder.log" 2>&1 &
-  FWD_PIDS+=($!)
-  log "TCP forwarder PID: ${FWD_PIDS[-1]} (127.0.0.1:$SERVER_PORT -> $SERVER_IP:$SERVER_PORT)"
+  TCP_FWD_PID=$!
+  log "TCP forwarder PID: $TCP_FWD_PID (127.0.0.1:$SERVER_PORT -> $SERVER_IP:$SERVER_PORT)"
 
   /usr/bin/python3 "$FORWARDER" --proto udp \
     --listen "127.0.0.1:$LOCATOR_PORT" \
     --upstream "$SERVER_IP:$LOCATOR_PORT" \
     >>"$LOG_DIR/forwarder.log" 2>&1 &
-  FWD_PIDS+=($!)
-  log "UDP forwarder PID: ${FWD_PIDS[-1]} (127.0.0.1:$LOCATOR_PORT -> $SERVER_IP:$LOCATOR_PORT)"
+  UDP_FWD_PID=$!
+  log "UDP forwarder PID: $UDP_FWD_PID (127.0.0.1:$LOCATOR_PORT -> $SERVER_IP:$LOCATOR_PORT)"
 else
   log "server is localhost; skipping forwarders"
 fi
 
 cleanup() {
-  log "shutdown (forwarders: ${FWD_PIDS[*]:-none})"
-  for pid in "${FWD_PIDS[@]}"; do
-    kill "$pid" 2>/dev/null || true
+  log "shutdown (TCP=$TCP_FWD_PID UDP=$UDP_FWD_PID)"
+  for pid in "$TCP_FWD_PID" "$UDP_FWD_PID"; do
+    [[ -n "$pid" ]] && kill "$pid" 2>/dev/null || true
   done
-  for pid in "${FWD_PIDS[@]}"; do
-    wait "$pid" 2>/dev/null || true
+  for pid in "$TCP_FWD_PID" "$UDP_FWD_PID"; do
+    [[ -n "$pid" ]] && wait "$pid" 2>/dev/null || true
   done
 }
 trap cleanup EXIT INT TERM
