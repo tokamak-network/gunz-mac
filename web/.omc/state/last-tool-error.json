@@ -1,0 +1,7 @@
+{
+  "tool_name": "Bash",
+  "tool_input_preview": "{\"command\":\"# Test SSH access\\nssh -o StrictHostKeyChecking=no -o ConnectTimeout=10 root@188.166.224.211 \\\"uname -a; echo OK\\\" 2>&1 | tail -5\\necho \\\"===\\\"\\n# Diagnose server state\\nssh -o StrictHostK...",
+  "error": "Exit code 255\nroot@188.166.224.211: Permission denied (publickey).\r\n===\nPseudo-terminal will not be allocated because stdin is not a terminal.\r\nroot@188.166.224.211: Permission denied (publickey).",
+  "timestamp": "2026-05-09T10:59:15.041Z",
+  "retry_count": 1
+}

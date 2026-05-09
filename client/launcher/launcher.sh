@@ -11,6 +11,7 @@ CONFIG="$RES/config.json"
 WINE_BIN="$RES/wine/bin/wine"
 GAME_DIR="$RES/game"
 FORWARDER="$RES/launcher/forwarder.py"
+LOCATOR_PORT="${LOCATOR_PORT:-8900}"
 
 export WINEPREFIX="${WINEPREFIX:-$HOME/Library/Application Support/GunZMac/wineprefix}"
 export WINEDEBUG="${WINEDEBUG:--all}"
@@ -52,26 +53,34 @@ if [[ ! -f "$WINEPREFIX/system.reg" ]]; then
   "$RES/wine/bin/wineserver" -w 2>/dev/null || true
 fi
 
-# TCP 포워더 시작 (127.0.0.1:PORT -> SERVER_IP:PORT)
-# 서버가 이미 로컬에 있으면 포워더 불필요
-FWD_PID=""
+# 포워더 시작: TCP 6000 (MatchServer) + UDP 8900 (Locator)
+FWD_PIDS=()
 if [[ "$SERVER_IP" != "127.0.0.1" && "$SERVER_IP" != "localhost" ]]; then
-  /usr/bin/python3 "$FORWARDER" \
+  /usr/bin/python3 "$FORWARDER" --proto tcp \
     --listen "127.0.0.1:$SERVER_PORT" \
     --upstream "$SERVER_IP:$SERVER_PORT" \
     >>"$LOG_DIR/forwarder.log" 2>&1 &
-  FWD_PID=$!
-  log "forwarder PID: $FWD_PID ($SERVER_IP:$SERVER_PORT)"
+  FWD_PIDS+=($!)
+  log "TCP forwarder PID: ${FWD_PIDS[-1]} (127.0.0.1:$SERVER_PORT -> $SERVER_IP:$SERVER_PORT)"
+
+  /usr/bin/python3 "$FORWARDER" --proto udp \
+    --listen "127.0.0.1:$LOCATOR_PORT" \
+    --upstream "$SERVER_IP:$LOCATOR_PORT" \
+    >>"$LOG_DIR/forwarder.log" 2>&1 &
+  FWD_PIDS+=($!)
+  log "UDP forwarder PID: ${FWD_PIDS[-1]} (127.0.0.1:$LOCATOR_PORT -> $SERVER_IP:$LOCATOR_PORT)"
 else
-  log "server is localhost; skipping forwarder"
+  log "server is localhost; skipping forwarders"
 fi
 
 cleanup() {
-  log "shutdown"
-  if [[ -n "$FWD_PID" ]]; then
-    kill "$FWD_PID" 2>/dev/null || true
-    wait "$FWD_PID" 2>/dev/null || true
-  fi
+  log "shutdown (forwarders: ${FWD_PIDS[*]:-none})"
+  for pid in "${FWD_PIDS[@]}"; do
+    kill "$pid" 2>/dev/null || true
+  done
+  for pid in "${FWD_PIDS[@]}"; do
+    wait "$pid" 2>/dev/null || true
+  done
 }
 trap cleanup EXIT INT TERM
 
