@@ -8,51 +8,51 @@ export default function Page() {
           <span className="brand__mark">⌥</span>
           <span className="brand__name">{SITE.title}</span>
         </div>
-        <h1 className="hero__title">Mac에서 GunZ를 즐기세요.</h1>
+        <h1 className="hero__title">Play GunZ on your Mac.</h1>
         <p className="hero__sub">{SITE.tagline}</p>
         <div className="cta">
           <a className="btn btn--primary" href={downloadUrl()}>
-            macOS용 다운로드 ({SITE.releaseTag})
+            Download for macOS ({SITE.releaseTag})
           </a>
           <a className="btn btn--ghost" href={repoUrl()}>GitHub</a>
         </div>
         <p className="hero__meta">
-          Apple Silicon · macOS 14+ · 약 600MB · 코드 서명 없음
+          Apple Silicon · macOS 14+ · ~600MB · Unsigned
         </p>
       </header>
 
       <section className="section">
-        <h2>설치 방법</h2>
+        <h2>Installation</h2>
         <ol className="steps">
           <li>
-            <strong>다운로드</strong>한 <code>GunZ-Mac.zip</code>의 압축을 풉니다.
+            <strong>Download</strong> and unzip <code>GunZ-Mac.zip</code>.
           </li>
           <li>
-            <strong>GunZ Mac.app</strong>을 <code>/Applications</code> 폴더로 이동합니다.
+            Move <strong>GunZ Mac.app</strong> to the <code>/Applications</code> folder.
           </li>
           <li>
-            처음 실행 시 “확인되지 않은 개발자” 경고가 뜹니다.
+            On first launch, you may see an “unidentified developer” warning.
             <ul>
-              <li>앱을 <strong>우클릭 → 열기</strong> 후 다이얼로그에서 <strong>열기</strong>를 다시 클릭하세요.</li>
-              <li>또는 <em>시스템 설정 → 개인정보 보호 및 보안</em>에서 차단된 앱을 허용하세요.</li>
+              <li><strong>Right-click → Open</strong>, then click <strong>Open</strong> again in the dialog.</li>
+              <li>Or allow the blocked app from <em>System Settings → Privacy &amp; Security</em>.</li>
             </ul>
           </li>
           <li>
-            첫 실행 시 Wine 환경 초기화로 1~2분이 걸립니다. 이후 실행은 빠릅니다.
+            The first launch takes 1–2 minutes to initialize the Wine environment. Subsequent launches are fast.
           </li>
         </ol>
       </section>
 
       <section className="section">
-        <h2>서버 주소 변경</h2>
+        <h2>Changing the Server Address</h2>
         <p>
-          기본적으로 <code>config.json</code>에 적힌 서버로 접속합니다.
-          다른 서버에 붙으려면 .app 패키지 안의 설정을 직접 편집하세요.
+          By default, the app connects to the server specified in <code>config.json</code>.
+          To connect to a different server, edit the settings inside the .app package directly.
         </p>
-        <pre>{`# 1. 앱 패키지 내부 보기 (우클릭 → 패키지 내용 보기)
+        <pre>{`# 1. View package contents (right-click → Show Package Contents)
 GunZ Mac.app/Contents/Resources/config.json
 
-# 2. server_ip 값을 원하는 서버로 교체
+# 2. Replace the server_ip value with your desired server
 {
   "server_ip": "203.0.113.10",
   "server_port": 6000
@@ -60,30 +60,30 @@ GunZ Mac.app/Contents/Resources/config.json
       </section>
 
       <section className="section">
-        <h2>문제 해결</h2>
+        <h2>Troubleshooting</h2>
         <details>
-          <summary>실행 시 “손상되어 열 수 없습니다”라고 나옵니다.</summary>
+          <summary>“The app is damaged and can’t be opened.”</summary>
           <p>
-            macOS Gatekeeper가 격리한 상태입니다. 터미널에서 다음을 실행하세요:
+            macOS Gatekeeper has quarantined the app. Run the following in Terminal:
           </p>
           <pre>{`xattr -cr "/Applications/GunZ Mac.app"`}</pre>
         </details>
         <details>
-          <summary>창이 안 뜨거나 즉시 종료됩니다.</summary>
+          <summary>The window doesn’t appear or the app quits immediately.</summary>
           <p>
-            로그를 확인하세요. <code>~/Library/Logs/GunZMac/</code>에
-            <code>launcher.log</code>, <code>forwarder.log</code>, <code>gunz.log</code>가 있습니다.
+            Check the logs. You’ll find <code>launcher.log</code>, <code>forwarder.log</code>, and <code>gunz.log</code>
+            in <code>~/Library/Logs/GunZMac/</code>.
           </p>
         </details>
         <details>
-          <summary>서버에 접속할 수 없습니다.</summary>
+          <summary>Can’t connect to the server.</summary>
           <p>
-            <code>config.json</code>의 IP가 정확한지, 서버에서 6000번 포트가 열려 있는지 확인하세요.
-            로컬 Mac에서 <code>nc -vz &lt;서버IP&gt; 6000</code>으로 도달 가능 여부를 점검할 수 있습니다.
+            Make sure the IP in <code>config.json</code> is correct and port 6000 is open on the server.
+            You can check reachability from your Mac with <code>nc -vz &lt;server-ip&gt; 6000</code>.
           </p>
         </details>
         <details>
-          <summary>완전히 삭제하려면?</summary>
+          <summary>How do I uninstall completely?</summary>
           <pre>{`rm -rf "/Applications/GunZ Mac.app"
 rm -rf ~/Library/Application\\ Support/GunZMac
 rm -rf ~/Library/Logs/GunZMac`}</pre>
@@ -92,8 +92,8 @@ rm -rf ~/Library/Logs/GunZMac`}</pre>
 
       <footer className="foot">
         <p>
-          이 빌드는 RefinedGunz(Asunaya/RefinedGunz)의 공개 클라이언트를 macOS용으로 패키징한 것입니다.
-          GunZ는 MAIET Entertainment의 상표입니다.
+          This build packages the public RefinedGunz client (Asunaya/RefinedGunz) for macOS.
+          GunZ is a trademark of MAIET Entertainment.
         </p>
       </footer>
 

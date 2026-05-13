@@ -1,8 +1,8 @@
-// 배포할 때 GitHub repo와 release tag로 교체하세요.
-// 예: GITHUB_OWNER=myuser, GITHUB_REPO=gunz-mac, RELEASE_TAG=v0.1.0
+// Replace with your GitHub repo and release tag when deploying.
+// e.g. GITHUB_OWNER=myuser, GITHUB_REPO=gunz-mac, RELEASE_TAG=v0.1.0
 export const SITE = {
   title: "GunZ Mac",
-  tagline: "Mac에서 GunZ를 한 번의 더블클릭으로",
+  tagline: "GunZ on Mac in a single double-click",
   githubOwner: process.env.NEXT_PUBLIC_GITHUB_OWNER ?? "YOUR_GITHUB_USER",
   githubRepo: process.env.NEXT_PUBLIC_GITHUB_REPO ?? "gunz-mac",
   releaseTag: process.env.NEXT_PUBLIC_RELEASE_TAG ?? "v0.1.0",
