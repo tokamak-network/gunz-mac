@@ -42,3 +42,238 @@ pre {
   font-size: 13px;
   line-height: 1.55;
 }
+
+/* ============================================================
+   RIVAI landing (route: /)
+   Activated by adding the `rivai-landing` class to <body>.
+   ============================================================ */
+body.rivai-landing {
+  background: #000000;
+  color: #ffffff;
+  font-family: var(--rivai-font, 'Inter'), sans-serif;
+  overflow: hidden;
+  min-height: 100vh;
+}
+
+.rivai-container {
+  position: relative;
+  width: 100vw;
+  height: 100vh;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+}
+
+.rivai-video-background {
+  position: absolute;
+  inset: 0;
+  z-index: 0;
+  background-color: #000;
+}
+
+.rivai-video-element {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  position: absolute;
+  top: 0;
+  left: 0;
+  transition: opacity 1s ease-in-out;
+  transform: scale(1.15);
+  transform-origin: center;
+}
+
+.rivai-video-overlay {
+  position: absolute;
+  inset: 0;
+  background: radial-gradient(circle, transparent 0%, rgba(0, 0, 0, 0.8) 100%);
+}
+
+.rivai-inspired-badge {
+  position: absolute;
+  top: 2rem;
+  right: 2.5rem;
+  z-index: 20;
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  padding: 0.5rem 0.5rem 0.5rem 1.25rem;
+  background: rgba(255, 255, 255, 0.05);
+  border: 1px solid rgba(255, 255, 255, 0.15);
+  border-radius: 100px;
+  backdrop-filter: blur(20px);
+  -webkit-backdrop-filter: blur(20px);
+}
+
+.rivai-inspired-text {
+  font-size: 0.75rem;
+  font-weight: 700;
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+  color: #cccccc;
+}
+
+.rivai-inspired-btn {
+  display: inline-flex;
+  align-items: center;
+  padding: 0.5rem 1.25rem;
+  background-color: #ffffff;
+  color: #000000;
+  font-size: 0.875rem;
+  font-weight: 900;
+  letter-spacing: 0.05em;
+  border-radius: 100px;
+  text-decoration: none;
+  transition: transform 0.2s, background-color 0.2s;
+}
+
+.rivai-inspired-btn:hover {
+  transform: scale(1.05);
+  background-color: #eeeeee;
+}
+
+.rivai-main {
+  position: relative;
+  z-index: 10;
+  text-align: center;
+}
+
+.rivai-header {
+  margin-bottom: 3rem;
+}
+
+.rivai-coming-soon {
+  display: block;
+  font-size: 1.125rem;
+  font-weight: 700;
+  letter-spacing: 0.6em;
+  color: #999999;
+  margin-bottom: 2.5rem;
+}
+
+.rivai-logo {
+  font-size: 12rem;
+  font-weight: 900;
+  letter-spacing: -0.06em;
+  line-height: 0.9;
+  margin: 0;
+}
+
+.rivai-description {
+  font-size: 1.5rem;
+  color: #999999;
+  line-height: 1.5;
+  margin: 0 0 4rem;
+}
+
+.rivai-action-area {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 1.5rem;
+}
+
+.rivai-form {
+  display: flex;
+  gap: 1rem;
+  width: 100%;
+  max-width: 600px;
+}
+
+.rivai-input {
+  flex: 1;
+  background: rgba(255, 255, 255, 0.05);
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  color: white;
+  padding: 1.5rem 2rem;
+  font-size: 1.125rem;
+  border-radius: 100px;
+  backdrop-filter: blur(10px);
+  -webkit-backdrop-filter: blur(10px);
+  outline: none;
+  transition: border-color 0.3s;
+  font-family: inherit;
+}
+
+.rivai-input:focus {
+  border-color: rgba(255, 255, 255, 0.5);
+}
+
+.rivai-submit {
+  background-color: #ffffff;
+  color: #000000;
+  border: none;
+  padding: 1.5rem 3rem;
+  font-size: 1.125rem;
+  font-weight: 700;
+  border-radius: 100px;
+  cursor: pointer;
+  transition: transform 0.2s, background-color 0.2s;
+  white-space: nowrap;
+  font-family: inherit;
+}
+
+.rivai-submit:hover:not(:disabled) {
+  transform: scale(1.05);
+  background-color: #eeeeee;
+}
+
+.rivai-success {
+  font-size: 1.25rem;
+  font-weight: 700;
+  color: #ffffff;
+  background: rgba(255, 255, 255, 0.05);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  padding: 1.5rem 3rem;
+  border-radius: 100px;
+  backdrop-filter: blur(20px);
+  -webkit-backdrop-filter: blur(20px);
+}
+
+.rivai-footer {
+  position: absolute;
+  bottom: 2.5rem;
+  width: 100%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 10;
+}
+
+.rivai-footer-left {
+  position: absolute;
+  left: 2.5rem;
+}
+
+.rivai-logo-circle {
+  width: 2.5rem;
+  height: 2.5rem;
+  border: 1px solid #333333;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 0.75rem;
+  font-weight: 900;
+  color: #555555;
+}
+
+.rivai-copyright {
+  font-size: 0.625rem;
+  color: #333333;
+  font-weight: 700;
+  letter-spacing: 0.2em;
+}
+
+@media (max-width: 768px) {
+  .rivai-logo { font-size: 4rem; }
+  .rivai-coming-soon { font-size: 0.625rem; letter-spacing: 0.4em; }
+  .rivai-description { font-size: 1rem; margin-bottom: 2.5rem; }
+  .rivai-form { flex-direction: column; padding: 0 1.5rem; }
+  .rivai-input,
+  .rivai-submit { padding: 1.1rem 1.5rem; font-size: 1rem; }
+  .rivai-inspired-badge { top: 1rem; right: 1rem; padding: 0.35rem 0.35rem 0.35rem 0.9rem; }
+  .rivai-inspired-text { font-size: 0.625rem; letter-spacing: 0.15em; }
+  .rivai-inspired-btn { padding: 0.4rem 0.9rem; font-size: 0.75rem; }
+}
