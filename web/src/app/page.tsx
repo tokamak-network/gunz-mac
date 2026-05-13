@@ -1,6 +1,10 @@
-import { downloadUrl, repoUrl, SITE } from "@/site";
+import { fetchLatestRelease, releasesUrl, repoUrl, SITE } from "@/site";
 
-export default function Page() {
+export default async function Page() {
+  const release = await fetchLatestRelease();
+  const downloadHref = release?.zipUrl ?? releasesUrl();
+  const downloadLabel = release ? `Download for macOS (${release.tag})` : "View releases";
+
   return (
     <main className="page">
       <header className="hero">
@@ -11,8 +15,8 @@ export default function Page() {
         <h1 className="hero__title">Play GunZ on your Mac.</h1>
         <p className="hero__sub">{SITE.tagline}</p>
         <div className="cta">
-          <a className="btn btn--primary" href={downloadUrl()}>
-            Download for macOS ({SITE.releaseTag})
+          <a className="btn btn--primary" href={downloadHref}>
+            {downloadLabel}
           </a>
           <a className="btn btn--ghost" href={repoUrl()}>GitHub</a>
         </div>

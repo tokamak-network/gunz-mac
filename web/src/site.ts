@@ -1,18 +1,46 @@
-// Replace with your GitHub repo and release tag when deploying.
-// e.g. GITHUB_OWNER=myuser, GITHUB_REPO=gunz-mac, RELEASE_TAG=v0.1.0
 export const SITE = {
   title: "GunZ Mac",
   tagline: "GunZ on Mac in a single double-click",
-  githubOwner: process.env.NEXT_PUBLIC_GITHUB_OWNER ?? "YOUR_GITHUB_USER",
+  githubOwner: process.env.NEXT_PUBLIC_GITHUB_OWNER ?? "tokamak-network",
   githubRepo: process.env.NEXT_PUBLIC_GITHUB_REPO ?? "gunz-mac",
-  releaseTag: process.env.NEXT_PUBLIC_RELEASE_TAG ?? "v0.1.0",
-  zipName: process.env.NEXT_PUBLIC_ZIP_NAME ?? "GunZ-Mac-0.1.0.zip",
 } as const;
 
-export function downloadUrl(): string {
-  return `https://github.com/${SITE.githubOwner}/${SITE.githubRepo}/releases/download/${SITE.releaseTag}/${SITE.zipName}`;
-}
+export type ReleaseInfo = {
+  tag: string;
+  zipName: string;
+  zipUrl: string;
+};
 
 export function repoUrl(): string {
   return `https://github.com/${SITE.githubOwner}/${SITE.githubRepo}`;
+}
+
+export function releasesUrl(): string {
+  return `${repoUrl()}/releases`;
+}
+
+export async function fetchLatestRelease(): Promise<ReleaseInfo | null> {
+  try {
+    const res = await fetch(
+      `https://api.github.com/repos/${SITE.githubOwner}/${SITE.githubRepo}/releases/latest`,
+      {
+        next: { revalidate: 600 },
+        headers: { Accept: "application/vnd.github+json" },
+      },
+    );
+    if (!res.ok) return null;
+    const data = (await res.json()) as {
+      tag_name?: string;
+      assets?: { name: string; browser_download_url: string }[];
+    };
+    const asset = data.assets?.find((a) => a.name.toLowerCase().endsWith(".zip"));
+    if (!data.tag_name || !asset) return null;
+    return {
+      tag: data.tag_name,
+      zipName: asset.name,
+      zipUrl: asset.browser_download_url,
+    };
+  } catch {
+    return null;
+  }
 }
