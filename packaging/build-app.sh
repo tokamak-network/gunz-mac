@@ -114,6 +114,13 @@ rsync -a --exclude='Gunz.dmp' --exclude='mlog.txt' --exclude='.DS_Store' \
 log "쿼런틴 속성 제거"
 xattr -cr "$APP" 2>/dev/null || true
 
+# Ad-hoc 코드서명: 다운로드된 .app이 Gatekeeper에서 "손상" 메시지 대신
+# "확인되지 않은 개발자" 경고를 띄우게 만든다 (우클릭→열기로 우회 가능).
+# Wine 번들 안 모든 Mach-O를 재귀적으로 서명한다 (~5000 파일, 수 초).
+log "ad-hoc 코드서명 (--deep)"
+codesign --force --deep --sign - --timestamp=none "$APP" 2>&1 | tail -5
+codesign --verify --deep "$APP" 2>&1 || die "코드서명 검증 실패"
+
 log "App 크기"
 du -sh "$APP"
 
