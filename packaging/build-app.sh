@@ -24,6 +24,9 @@ WINE_SRC="${GUNZ_WINE_SRC:-$WINE_SRC_DEFAULT}"
 CLIENT_SRC_DEFAULT="/Users/geonwoo/Game/build/refinedgunz"
 CLIENT_SRC="${GUNZ_CLIENT_SRC:-$CLIENT_SRC_DEFAULT}"
 
+LAUNCHER_UI_SRC="$REPO_ROOT/client/launcher-ui/RivaiLauncher.swift"
+SWIFT_TARGET="${GUNZ_SWIFT_TARGET:-arm64-apple-macosx14.0}"
+
 while [[ $# -gt 0 ]]; do
   case "$1" in
     --server-ip) SERVER_IP="$2"; shift 2 ;;
@@ -44,6 +47,8 @@ die() { printf '\033[0;31m[build]\033[0m %s\n' "$*" >&2; exit 1; }
 
 [[ -d "$WINE_SRC" ]] || die "wine 소스가 없습니다: $WINE_SRC (--wine-src로 지정)"
 [[ -f "$CLIENT_SRC/Gunz.exe" ]] || die "RefinedGunz 클라이언트가 없습니다: $CLIENT_SRC (--client-src로 지정)"
+[[ -f "$LAUNCHER_UI_SRC" ]] || die "런처 UI 소스가 없습니다: $LAUNCHER_UI_SRC"
+command -v swiftc >/dev/null 2>&1 || die "swiftc가 필요합니다 (Xcode Command Line Tools를 설치하세요)"
 
 log "appdir 정리 ($APP)"
 rm -rf "$APP" "$STAGE"
@@ -61,8 +66,8 @@ cat > "$APP/Contents/Info.plist" <<EOF
 <!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
 <plist version="1.0">
 <dict>
-  <key>CFBundleDisplayName</key><string>GunZ Mac</string>
-  <key>CFBundleName</key><string>GunZ Mac</string>
+  <key>CFBundleDisplayName</key><string>RIVAI</string>
+  <key>CFBundleName</key><string>RIVAI</string>
   <key>CFBundleIdentifier</key><string>app.gunz-mac</string>
   <key>CFBundleVersion</key><string>${APP_VERSION}</string>
   <key>CFBundleShortVersionString</key><string>${APP_VERSION}</string>
@@ -70,18 +75,18 @@ cat > "$APP/Contents/Info.plist" <<EOF
   <key>CFBundlePackageType</key><string>APPL</string>
   <key>LSMinimumSystemVersion</key><string>14.0</string>
   <key>NSHighResolutionCapable</key><true/>
+  <key>NSPrincipalClass</key><string>NSApplication</string>
   <key>LSApplicationCategoryType</key><string>public.app-category.action-games</string>
   <key>NSHumanReadableCopyright</key><string>RefinedGunz client (community fork). Wine bundled.</string>
 </dict>
 </plist>
 EOF
 
-# 진입 바이너리 (간단한 bash 래퍼)
-cat > "$APP/Contents/MacOS/GunZMac" <<'EOF'
-#!/bin/bash
-DIR="$(cd "$(dirname "$0")/.." && pwd)"
-exec "$DIR/Resources/launcher/launcher.sh" "$@"
-EOF
+log "SwiftUI 런처 컴파일 (target=$SWIFT_TARGET)"
+swiftc -O -parse-as-library -target "$SWIFT_TARGET" \
+  -framework AppKit -framework SwiftUI \
+  "$LAUNCHER_UI_SRC" \
+  -o "$APP/Contents/MacOS/GunZMac"
 chmod +x "$APP/Contents/MacOS/GunZMac"
 
 log "런처 스크립트 복사"
