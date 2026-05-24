@@ -206,7 +206,8 @@ function MetaGamesSection() {
             </div>
           </div>
 
-          {/* branches: solid trunk line + 8 dashed root curves */}
+          {/* branches: solid trunk line + 8 dashed root curves
+              .root[data-index=N] pairs with .metaCard[data-index=N] for hover */}
           <svg
             className={styles.branches}
             viewBox="0 0 600 100"
@@ -214,6 +215,7 @@ function MetaGamesSection() {
             aria-hidden
           >
             <line
+              className={styles.trunk}
               x1={TRUNK_X}
               y1="0"
               x2={TRUNK_X}
@@ -225,6 +227,8 @@ function MetaGamesSection() {
             {ROOT_X.map((x, i) => (
               <path
                 key={i}
+                className={styles.root}
+                data-index={i}
                 d={`M ${TRUNK_X} ${SPLIT_Y} C ${TRUNK_X} 65 ${x} 80 ${x} 100`}
                 stroke="currentColor"
                 strokeWidth="1"
@@ -237,8 +241,12 @@ function MetaGamesSection() {
 
           {/* roots: meta-game cards in one row (collapses to 2×4 on mobile) */}
           <div className={styles.roots}>
-            {META_CARDS.map((c) => (
-              <div key={c.label} className={styles.metaCard}>
+            {META_CARDS.map((c, i) => (
+              <div
+                key={c.label}
+                className={styles.metaCard}
+                data-index={i}
+              >
                 <div className={styles.metaCardLabel}>{c.label}</div>
                 <div className={styles.metaCardDesc}>{c.desc}</div>
               </div>

@@ -322,6 +322,12 @@
   justify-content: center;
   text-align: center;
   min-height: 96px;
+  transition: border-color 200ms ease, background-color 200ms ease;
+}
+
+.metaCard:hover {
+  border-color: #ffffff;
+  background-color: #1f2228;
 }
 
 .centerRecord {
@@ -336,6 +342,54 @@
   text-transform: uppercase;
   width: 200px;
   padding: 16px;
+}
+
+.centerRecord:hover {
+  border-color: #ffffff;
+}
+
+/* ── tree hover propagation (CSS :has, no JS) ────────────────────
+   when a meta card is hovered:
+     - all roots dim to opacity 0.2
+     - the matching root brightens to Frost White, opacity 1
+     - the trunk also brightens (record → that card lineage)
+   when the record itself is hovered:
+     - every root and the trunk go Frost White, full opacity
+   ──────────────────────────────────────────────────────────────── */
+
+.trunk,
+.root {
+  transition: stroke 200ms ease, opacity 200ms ease;
+}
+
+.tree:has(.metaCard:hover) .root { opacity: 0.2; }
+.tree:has(.metaCard:hover) .trunk { stroke: #ffffff; }
+
+.tree:has(.metaCard[data-index="0"]:hover) .root[data-index="0"],
+.tree:has(.metaCard[data-index="1"]:hover) .root[data-index="1"],
+.tree:has(.metaCard[data-index="2"]:hover) .root[data-index="2"],
+.tree:has(.metaCard[data-index="3"]:hover) .root[data-index="3"],
+.tree:has(.metaCard[data-index="4"]:hover) .root[data-index="4"],
+.tree:has(.metaCard[data-index="5"]:hover) .root[data-index="5"],
+.tree:has(.metaCard[data-index="6"]:hover) .root[data-index="6"],
+.tree:has(.metaCard[data-index="7"]:hover) .root[data-index="7"] {
+  opacity: 1;
+  stroke: #ffffff;
+}
+
+.tree:has(.centerRecord:hover) .trunk,
+.tree:has(.centerRecord:hover) .root {
+  stroke: #ffffff;
+  opacity: 1;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .metaCard,
+  .centerRecord,
+  .trunk,
+  .root {
+    transition: none;
+  }
 }
 
 .centerRecord .recordId {
