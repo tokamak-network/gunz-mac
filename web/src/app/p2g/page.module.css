@@ -189,29 +189,37 @@
 }
 
 /* ----------------------------------------------------------------
-   § 2  image placeholder — callout card, 0 radius
+   § 2  image card — callout, 0 radius, image fills full width
    ---------------------------------------------------------------- */
 
-.imagePlaceholder {
+.imageCard {
   background: #0c0c0b;
   border: 1px solid #1f2228;
   border-radius: 0;
-  padding: 96px 24px;
-  text-align: center;
-  color: #7d8187;
+  padding: 0;
+  margin: 0 auto;
+  max-width: 800px;
+  overflow: hidden;
+}
+
+.imageCardImg {
+  display: block;
+  width: 100%;
+  height: auto;
+}
+
+.imageCardCaption {
+  display: block;
+  border-top: 1px solid #1f2228;
+  padding: 12px 16px;
   font-family: var(--font-mono), "Space Mono", ui-monospace, "SF Mono", Menlo,
     monospace;
   font-weight: 400;
-  font-size: 14px;
-  line-height: 1.43;
+  font-size: 12px;
+  line-height: 2;
   letter-spacing: 0.1em;
-}
-
-.imagePlaceholder strong {
-  display: block;
-  color: #ffffff;
-  margin-bottom: 12px;
-  font-weight: 400;
+  color: #7d8187;
+  text-align: center;
   text-transform: uppercase;
 }
 
@@ -378,7 +386,7 @@
   .caption { margin: 32px auto 0; }
   .bridge { margin-top: 32px; }
 
-  .imagePlaceholder { padding: 64px 16px; }
+  .imageCardCaption { padding: 10px 12px; font-size: 11px; }
   .recordKey { flex: 0 0 84px; }
 
   /* § 4 tree on mobile: shrink branches band, fold roots to 2×4 */

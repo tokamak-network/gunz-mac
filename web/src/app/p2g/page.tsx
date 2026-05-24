@@ -1,4 +1,5 @@
 import type { Metadata } from "next";
+import Image from "next/image";
 import { Space_Mono } from "next/font/google";
 import styles from "./page.module.css";
 
@@ -71,12 +72,20 @@ function GameSection() {
         <p className={styles.eyebrow}>The Core · Game for Fun</p>
         <h2 className={styles.lesson}>The game is just a game.</h2>
 
-        <div className={styles.imagePlaceholder}>
-          <strong>[ weapon mechanics image ]</strong>
-          sword · shotgun · revolver
-          <br />
-          dodge ↔ ambush counterplay
-        </div>
+        <figure className={styles.imageCard}>
+          <Image
+            src="/p2g/weapon-mechanics.png"
+            alt="Weapon mechanics — sword, shotgun, revolver and dodge/ambush counterplay"
+            width={2000}
+            height={1151}
+            sizes="(max-width: 720px) 92vw, 800px"
+            priority
+            className={styles.imageCardImg}
+          />
+          <figcaption className={styles.imageCardCaption}>
+            sword · shotgun · revolver <span aria-hidden>·</span> dodge ↔ ambush
+          </figcaption>
+        </figure>
 
         <p className={styles.caption}>
           Skill-based PvP. No tokens inside the match.
