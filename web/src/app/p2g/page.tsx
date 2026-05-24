@@ -1,5 +1,13 @@
 import type { Metadata } from "next";
+import { Space_Mono } from "next/font/google";
 import styles from "./page.module.css";
+
+const mono = Space_Mono({
+  subsets: ["latin"],
+  weight: ["400"],
+  variable: "--font-mono",
+  display: "swap",
+});
 
 export const metadata: Metadata = {
   title: "Play to Glory — wireframe",
@@ -9,7 +17,7 @@ export const metadata: Metadata = {
 
 export default function P2GPage() {
   return (
-    <div className={styles.page}>
+    <div className={`${mono.variable} ${styles.page}`}>
       <HeroSection />
       <GameSection />
       <RecordSection />
@@ -27,7 +35,7 @@ export default function P2GPage() {
 function HeroSection() {
   return (
     <section className={styles.section} data-section="1">
-      <span className={styles.sectionLabel}>§ 1</span>
+      <span className={styles.sectionLabel}>§ 01 / Hero</span>
       <div className={styles.content}>
         <h1 className={styles.title}>Play to Glory</h1>
         <div className={styles.subtitle}>
@@ -58,7 +66,7 @@ function HeroSection() {
 function GameSection() {
   return (
     <section className={styles.section} data-section="2">
-      <span className={styles.sectionLabel}>§ 2</span>
+      <span className={styles.sectionLabel}>§ 02 / The Core</span>
       <div className={styles.content}>
         <p className={styles.eyebrow}>The Core · Game for Fun</p>
         <h2 className={styles.lesson}>The game is just a game.</h2>
@@ -92,7 +100,7 @@ function GameSection() {
 function RecordSection() {
   return (
     <section className={styles.section} data-section="3">
-      <span className={styles.sectionLabel}>§ 3</span>
+      <span className={styles.sectionLabel}>§ 03 / The Record</span>
       <div className={styles.content}>
         <p className={styles.eyebrow}>The Record · Blockchain for Glory</p>
         <h2 className={styles.lesson}>
@@ -162,7 +170,7 @@ const META_CARDS: MetaCard[] = [
 function MetaGamesSection() {
   return (
     <section className={styles.section} data-section="4">
-      <span className={styles.sectionLabel}>§ 4</span>
+      <span className={styles.sectionLabel}>§ 04 / The Ecosystem</span>
       <div className={styles.content}>
         <p className={styles.eyebrow}>The Ecosystem · Meta-games</p>
         <h2 className={styles.lesson}>

@@ -1,228 +1,280 @@
 /* ============================================================
-   Play to Glory — STRUCTURAL WIREFRAME
-   Intentionally style-less. Black on white, system font.
-   Goal: evaluate section layout, hierarchy, and connection logic.
+   Play to Glory — xAI dark spec applied
+     Canvas        #0c0c0b   (Deep Midnight)
+     Surface       #1f2228   (Faded Steel) — borders, fills
+     Text          #ffffff   (Frost White)
+     Muted text    #7d8187   (callout detail gray)
+     Soft border   #474747   (Whisper Gray, SVG lines)
+     Focus         #2563eb   (Electric Blue) — input focus only
+
+   Type
+     Universal Sans → Inter (-0.025em)
+     GeistMono      → Space Mono (+0.1em)
+     Scale: 12 / 14 / 16 / 20 / 36 / 48 / 80
    ============================================================ */
 
 .page {
-  background: #ffffff;
-  color: #111111;
-  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI",
-    "Helvetica Neue", "Apple SD Gothic Neo", system-ui, sans-serif;
+  background: #0c0c0b;
+  color: #ffffff;
+  font-family: var(--rivai-font), Inter, -apple-system, BlinkMacSystemFont,
+    "Segoe UI", "Apple SD Gothic Neo", system-ui, sans-serif;
+  font-weight: 400;
   font-size: 16px;
   line-height: 1.5;
+  letter-spacing: -0.025em;
+  color-scheme: dark;
   min-height: 100vh;
-  color-scheme: light;
 }
 
-/* every section is a full-viewport-height frame with a top-left label */
+/* full-viewport section, with a 1px Faded Steel divider on top */
 .section {
   position: relative;
   min-height: 100vh;
-  border-top: 1px solid #d0d0d0;
-  padding: 5rem 2rem 5rem;
+  padding: 96px 24px;
   box-sizing: border-box;
   display: flex;
   flex-direction: column;
   justify-content: center;
 }
 
-.section:first-child { border-top: none; }
+.section:not(:first-child)::before {
+  content: "";
+  position: absolute;
+  top: 0;
+  left: 24px;
+  right: 24px;
+  height: 1px;
+  background: #1f2228;
+}
 
-/* alternating background to make section breaks visible */
-.section[data-section="2"],
-.section[data-section="4"] { background: #f6f6f6; }
-
+/* top-left chapter badge — Space Mono, +0.1em, muted */
 .sectionLabel {
   position: absolute;
-  top: 1.25rem;
-  left: 1.25rem;
-  font-family: ui-monospace, "SF Mono", Menlo, Consolas, monospace;
-  font-size: 0.72rem;
-  letter-spacing: 0.18em;
+  top: 24px;
+  left: 24px;
+  font-family: var(--font-mono), "Space Mono", ui-monospace, "SF Mono", Menlo,
+    monospace;
+  font-weight: 400;
+  font-size: 12px;
+  line-height: 2;
+  letter-spacing: 0.1em;
   text-transform: uppercase;
-  color: #777777;
+  color: #7d8187;
 }
 
 .content {
   width: 100%;
-  max-width: 64rem;
+  max-width: 1024px;
   margin: 0 auto;
 }
 
-/* ----- §1 hero ----- */
+/* ----------------------------------------------------------------
+   § 1  HERO
+   ---------------------------------------------------------------- */
 
 .title {
-  font-size: clamp(3rem, 9vw, 6.5rem);
-  font-weight: 600;
-  line-height: 1.04;
-  letter-spacing: -0.02em;
-  margin: 0 0 2rem;
+  font-size: 80px;
+  line-height: 1;
+  letter-spacing: -0.025em;
+  font-weight: 400;
+  margin: 0;
   text-align: center;
+  color: #ffffff;
 }
 
 .subtitle {
+  font-size: 20px;
+  line-height: 1.4;
+  letter-spacing: -0.025em;
+  margin: 48px 0 0;
   text-align: center;
-  font-size: 1.25rem;
-  color: #444444;
-  margin: 0;
+  color: #ffffff;
   display: flex;
   flex-direction: column;
-  gap: 0.35rem;
+  gap: 4px;
 }
 
 .heroDivider {
-  width: 4rem;
+  width: 48px;
   height: 1px;
   border: none;
-  background: #cccccc;
-  margin: 3rem auto 2rem;
+  background: #1f2228;
+  margin: 48px auto;
 }
 
 .heroNote {
-  text-align: center;
-  font-size: 1rem;
-  color: #555555;
+  font-size: 16px;
+  line-height: 1.5;
+  letter-spacing: -0.025em;
+  color: #7d8187;
   margin: 0 auto;
-  max-width: 32rem;
-  line-height: 1.7;
+  max-width: 480px;
+  text-align: center;
 }
 
 .scrollHint {
-  margin-top: 4rem;
-  text-align: center;
-  font-family: ui-monospace, "SF Mono", Menlo, Consolas, monospace;
-  font-size: 0.75rem;
-  letter-spacing: 0.2em;
+  margin-top: 96px;
+  font-family: var(--font-mono), "Space Mono", ui-monospace, "SF Mono", Menlo,
+    monospace;
+  font-weight: 400;
+  font-size: 12px;
+  line-height: 2;
+  letter-spacing: 0.1em;
   text-transform: uppercase;
-  color: #999999;
+  color: #7d8187;
+  text-align: center;
 }
 
-/* ----- per-section teaching layer ----- */
+/* ----------------------------------------------------------------
+   teaching layer (§ 2 – § 4)
+   ---------------------------------------------------------------- */
 
 .eyebrow {
-  font-family: ui-monospace, "SF Mono", Menlo, Consolas, monospace;
-  font-size: 0.72rem;
-  letter-spacing: 0.18em;
+  font-family: var(--font-mono), "Space Mono", ui-monospace, "SF Mono", Menlo,
+    monospace;
+  font-weight: 400;
+  font-size: 12px;
+  line-height: 2;
+  letter-spacing: 0.1em;
   text-transform: uppercase;
-  color: #888888;
+  color: #7d8187;
+  margin: 0 0 12px;
   text-align: center;
-  margin: 0 0 1.25rem;
 }
 
 .lesson {
-  font-size: clamp(1.5rem, 3vw, 2rem);
-  font-weight: 500;
-  line-height: 1.3;
-  margin: 0 0 2.5rem;
+  font-size: 36px;
+  line-height: 1.2;
+  letter-spacing: -0.025em;
+  font-weight: 400;
+  margin: 0 auto 48px;
   text-align: center;
-  color: #111111;
-  max-width: 38rem;
-  margin-left: auto;
-  margin-right: auto;
-  padding: 0 0 2.5rem;
+  color: #ffffff;
+  max-width: 720px;
 }
 
 .sublead {
+  font-size: 16px;
+  line-height: 1.5;
+  letter-spacing: -0.025em;
+  margin: 0 auto 48px;
   text-align: center;
-  font-size: 1rem;
-  color: #555555;
-  margin: 0 auto 2.75rem;
-  max-width: 36rem;
-  line-height: 1.6;
+  color: #7d8187;
+  max-width: 560px;
 }
 
 .caption {
-  margin: 2.5rem auto 0;
-  max-width: 36rem;
+  font-size: 16px;
+  line-height: 1.5;
+  letter-spacing: -0.025em;
+  margin: 48px auto 0;
   text-align: center;
-  color: #444444;
-  font-size: 1rem;
-  line-height: 1.65;
+  color: #7d8187;
+  max-width: 560px;
 }
 
 .caption em {
   font-style: italic;
-  color: #111111;
-  font-weight: 500;
+  color: #ffffff;
 }
 
 .bridge {
-  margin: 3.5rem auto 0;
-  max-width: 40rem;
+  font-size: 14px;
+  line-height: 1.43;
+  letter-spacing: -0.025em;
+  margin: 48px auto 0;
   text-align: center;
-  color: #888888;
-  font-style: italic;
-  font-size: 0.9rem;
+  color: #7d8187;
+  max-width: 640px;
 }
 
-/* ----- §2 image placeholder ----- */
+/* ----------------------------------------------------------------
+   § 2  image placeholder — callout card, 0 radius
+   ---------------------------------------------------------------- */
 
 .imagePlaceholder {
-  border: 1px dashed #999999;
-  background: #ffffff;
-  padding: 7rem 2rem;
+  background: #0c0c0b;
+  border: 1px solid #1f2228;
+  border-radius: 0;
+  padding: 96px 24px;
   text-align: center;
-  color: #777777;
-  font-family: ui-monospace, "SF Mono", Menlo, Consolas, monospace;
-  font-size: 0.9rem;
-  line-height: 1.7;
+  color: #7d8187;
+  font-family: var(--font-mono), "Space Mono", ui-monospace, "SF Mono", Menlo,
+    monospace;
+  font-weight: 400;
+  font-size: 14px;
+  line-height: 1.43;
+  letter-spacing: 0.1em;
 }
 
 .imagePlaceholder strong {
   display: block;
-  color: #222222;
-  margin-bottom: 0.5rem;
-  font-size: 0.95rem;
+  color: #ffffff;
+  margin-bottom: 12px;
+  font-weight: 400;
+  text-transform: uppercase;
 }
 
-/* ----- §3 record card ----- */
+/* ----------------------------------------------------------------
+   § 3  record card — callout card, key/value rows
+   ---------------------------------------------------------------- */
 
 .recordCard {
-  max-width: 34rem;
+  background: #0c0c0b;
+  border: 1px solid #1f2228;
+  border-radius: 0;
+  padding: 16px;
+  max-width: 560px;
   margin: 0 auto;
-  border: 1px solid #333333;
-  background: #ffffff;
-  padding: 1.5rem 1.75rem;
-  font-family: ui-monospace, "SF Mono", Menlo, Consolas, monospace;
-  font-size: 0.9rem;
 }
 
 .recordRow {
   display: flex;
-  padding: 0.35rem 0;
+  padding: 8px 0;
 }
 
 .recordKey {
-  flex: 0 0 6.5rem;
-  color: #888888;
+  flex: 0 0 104px;
+  font-family: var(--font-mono), "Space Mono", ui-monospace, "SF Mono", Menlo,
+    monospace;
+  font-weight: 400;
+  font-size: 12px;
+  line-height: 2;
+  letter-spacing: 0.1em;
   text-transform: uppercase;
-  font-size: 0.7rem;
-  letter-spacing: 0.15em;
-  padding-top: 0.15rem;
+  color: #7d8187;
 }
 
 .recordVal {
   flex: 1;
-  color: #111111;
+  font-family: var(--font-mono), "Space Mono", ui-monospace, "SF Mono", Menlo,
+    monospace;
+  font-weight: 400;
+  font-size: 14px;
+  line-height: 1.43;
+  letter-spacing: 0.1em;
+  color: #ffffff;
 }
 
 .recordVal a {
-  color: #111111;
+  color: #ffffff;
   text-decoration: underline;
-  margin-left: 0.5rem;
+  text-underline-offset: 2px;
+  margin-left: 8px;
 }
 
 .recordDivider {
   border: none;
-  border-top: 1px dashed #cccccc;
-  margin: 0.7rem 0;
+  border-top: 1px solid #1f2228;
+  margin: 8px 0;
 }
 
-/* ----- §4 constellation ----- */
+/* ----------------------------------------------------------------
+   § 4  constellation — 3×3 grid + dashed SVG lines
+   ---------------------------------------------------------------- */
 
 .constellationWrap {
-  max-width: 60rem;
+  max-width: 960px;
   margin: 0 auto;
 }
 
@@ -237,7 +289,7 @@
   inset: 0;
   width: 100%;
   height: 100%;
-  color: #999999;
+  color: #474747;
   pointer-events: none;
 }
 
@@ -248,62 +300,87 @@
   grid-template-rows: repeat(3, 1fr);
   width: 100%;
   height: 100%;
+  gap: 12px;
 }
 
 .metaCard,
 .centerRecord {
+  background: #0c0c0b;
+  border: 1px solid #1f2228;
+  border-radius: 0;
+  padding: 16px;
   display: flex;
   flex-direction: column;
   align-items: center;
   justify-content: center;
-  padding: 1rem;
-  margin: 0.85rem;
-  border: 1px solid #333333;
-  background: #ffffff;
   text-align: center;
 }
 
 .centerRecord {
-  background: #111111;
+  background: #1f2228;
   color: #ffffff;
-  font-family: ui-monospace, "SF Mono", Menlo, Consolas, monospace;
-  font-size: 0.78rem;
+  font-family: var(--font-mono), "Space Mono", ui-monospace, "SF Mono", Menlo,
+    monospace;
+  font-weight: 400;
+  font-size: 12px;
+  line-height: 2;
   letter-spacing: 0.1em;
   text-transform: uppercase;
 }
 
 .centerRecord .recordId {
-  font-size: 1.05rem;
-  margin-top: 0.3rem;
-  letter-spacing: 0.05em;
+  font-family: var(--rivai-font), Inter, system-ui, sans-serif;
+  font-size: 20px;
+  line-height: 1.4;
+  letter-spacing: -0.025em;
+  margin-top: 4px;
   text-transform: none;
+  color: #ffffff;
 }
 
 .metaCardLabel {
-  font-weight: 600;
-  font-size: 0.95rem;
-  margin-bottom: 0.3rem;
-  color: #111111;
+  font-size: 16px;
+  line-height: 1.5;
+  letter-spacing: -0.025em;
+  font-weight: 400;
+  color: #ffffff;
+  margin-bottom: 4px;
 }
 
 .metaCardDesc {
-  font-size: 0.72rem;
-  color: #777777;
-  font-family: ui-monospace, "SF Mono", Menlo, Consolas, monospace;
-  letter-spacing: 0.04em;
+  font-family: var(--font-mono), "Space Mono", ui-monospace, "SF Mono", Menlo,
+    monospace;
+  font-weight: 400;
+  font-size: 12px;
+  line-height: 1.43;
+  letter-spacing: 0.1em;
+  color: #7d8187;
 }
 
-/* ----- mobile ----- */
+/* ----------------------------------------------------------------
+   mobile
+   ---------------------------------------------------------------- */
 
 @media (max-width: 720px) {
-  .section { min-height: auto; padding: 4rem 1rem 4rem; }
-  .title { font-size: 2.5rem; margin-bottom: 1.75rem; }
-  .subtitle { font-size: 1rem; }
-  .h2 { font-size: 1.15rem; margin-bottom: 1.75rem; }
-  .imagePlaceholder { padding: 4rem 1rem; }
-  .recordKey { flex: 0 0 5rem; }
+  .section { min-height: auto; padding: 64px 16px; }
+  .section:not(:first-child)::before { left: 16px; right: 16px; }
+  .sectionLabel { top: 16px; left: 16px; }
+
+  .title { font-size: 48px; line-height: 1.11; }
+  .subtitle { font-size: 18px; margin-top: 32px; }
+  .heroDivider { margin: 32px auto; }
+  .scrollHint { margin-top: 64px; }
+
+  .lesson { font-size: 28px; margin-bottom: 32px; }
+  .sublead, .caption { margin-bottom: 32px; }
+  .caption { margin: 32px auto 0; }
+  .bridge { margin-top: 32px; }
+
+  .imagePlaceholder { padding: 64px 16px; }
+  .recordKey { flex: 0 0 84px; }
   .constellation { aspect-ratio: 2 / 3; }
-  .metaCard, .centerRecord { margin: 0.4rem; padding: 0.6rem; }
-  .metaCardLabel { font-size: 0.8rem; }
-  .metaCardDesc { font-size: 0.65rem; }
+  .gridCells { gap: 8px; }
+  .metaCard, .centerRecord { padding: 12px; }
+  .centerRecord .recordId { font-size: 18px; }
+  .metaCardLabel { font-size: 14px; }
 }
