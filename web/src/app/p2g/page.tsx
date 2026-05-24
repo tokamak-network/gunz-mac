@@ -154,18 +154,24 @@ function Row({ k, v }: { k: string; v: React.ReactNode }) {
    Lesson: "From one match, many games grow."
    ============================================================ */
 
-type MetaCard = { label: string; desc: string; col: 1 | 2 | 3; row: 1 | 2 | 3 };
+type MetaCard = { label: string; desc: string };
 
 const META_CARDS: MetaCard[] = [
-  { label: "Odds Market",    desc: "predictions priced on records", col: 1, row: 1 },
-  { label: "Ladder",         desc: "ranks computed from records",   col: 2, row: 1 },
-  { label: "Fan Tokens",     desc: "holders earn on player wins",   col: 3, row: 1 },
-  { label: "Lore Archive",   desc: "legendary matches, minted",     col: 1, row: 2 },
-  { label: "Replay Theater", desc: "every record, replayable",      col: 3, row: 2 },
-  { label: "Guild Score",    desc: "team's aggregate record",       col: 1, row: 3 },
-  { label: "Tournament",     desc: "brackets seeded by records",    col: 2, row: 3 },
-  { label: "+",              desc: "community-built",               col: 3, row: 3 },
+  { label: "Odds Market",    desc: "predictions priced on records" },
+  { label: "Ladder",         desc: "ranks computed from records" },
+  { label: "Fan Tokens",     desc: "holders earn on player wins" },
+  { label: "Lore Archive",   desc: "legendary matches, minted" },
+  { label: "Replay Theater", desc: "every record, replayable" },
+  { label: "Guild Score",    desc: "team's aggregate record" },
+  { label: "Tournament",     desc: "brackets seeded by records" },
+  { label: "+",              desc: "community-built" },
 ];
+
+/* Card x positions in the SVG viewBox 0..600:
+   8 equal slots, each 75 wide; center of slot N (1-indexed) = (N - 0.5) * 75 */
+const ROOT_X = META_CARDS.map((_, i) => (i + 0.5) * 75);
+const TRUNK_X = 300; // center of viewBox width (600/2)
+const SPLIT_Y = 30;  // where the trunk ends and roots begin
 
 function MetaGamesSection() {
   return (
@@ -182,52 +188,52 @@ function MetaGamesSection() {
           all built on top of the same skill-based matches.
         </p>
 
-        <div className={styles.constellationWrap}>
-          <div className={styles.constellation}>
-            <svg
-              className={styles.connections}
-              viewBox="0 0 3 3"
-              preserveAspectRatio="none"
-              aria-hidden
-            >
-              {META_CARDS.map((c) => (
-                <line
-                  key={c.label}
-                  x1="1.5"
-                  y1="1.5"
-                  x2={c.col - 0.5}
-                  y2={c.row - 0.5}
-                  stroke="currentColor"
-                  strokeWidth="1"
-                  strokeDasharray="6 6"
-                  vectorEffect="non-scaling-stroke"
-                />
-              ))}
-            </svg>
-
-            <div className={styles.gridCells}>
-              {[1, 2, 3].flatMap((row) =>
-                [1, 2, 3].map((col) => {
-                  if (col === 2 && row === 2) {
-                    return (
-                      <div key={`${row}-${col}`} className={styles.centerRecord}>
-                        <div>Record</div>
-                        <div className={styles.recordId}>#1,287</div>
-                      </div>
-                    );
-                  }
-                  const card = META_CARDS.find(
-                    (c) => c.col === col && c.row === row,
-                  )!;
-                  return (
-                    <div key={`${row}-${col}`} className={styles.metaCard}>
-                      <div className={styles.metaCardLabel}>{card.label}</div>
-                      <div className={styles.metaCardDesc}>{card.desc}</div>
-                    </div>
-                  );
-                }),
-              )}
+        <div className={styles.tree}>
+          {/* stem: record sits at top */}
+          <div className={styles.stem}>
+            <div className={styles.centerRecord}>
+              <div>Record</div>
+              <div className={styles.recordId}>#1,287</div>
             </div>
+          </div>
+
+          {/* branches: solid trunk line + 8 dashed root curves */}
+          <svg
+            className={styles.branches}
+            viewBox="0 0 600 100"
+            preserveAspectRatio="none"
+            aria-hidden
+          >
+            <line
+              x1={TRUNK_X}
+              y1="0"
+              x2={TRUNK_X}
+              y2={SPLIT_Y}
+              stroke="currentColor"
+              strokeWidth="1"
+              vectorEffect="non-scaling-stroke"
+            />
+            {ROOT_X.map((x, i) => (
+              <path
+                key={i}
+                d={`M ${TRUNK_X} ${SPLIT_Y} C ${TRUNK_X} 65 ${x} 80 ${x} 100`}
+                stroke="currentColor"
+                strokeWidth="1"
+                fill="none"
+                strokeDasharray="3 3"
+                vectorEffect="non-scaling-stroke"
+              />
+            ))}
+          </svg>
+
+          {/* roots: meta-game cards in one row (collapses to 2×4 on mobile) */}
+          <div className={styles.roots}>
+            {META_CARDS.map((c) => (
+              <div key={c.label} className={styles.metaCard}>
+                <div className={styles.metaCardLabel}>{c.label}</div>
+                <div className={styles.metaCardDesc}>{c.desc}</div>
+              </div>
+            ))}
           </div>
         </div>
 

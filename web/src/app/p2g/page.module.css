@@ -270,36 +270,35 @@
 }
 
 /* ----------------------------------------------------------------
-   § 4  constellation — 3×3 grid + dashed SVG lines
+   § 4  tree — record (stem) ─→ branches ─→ meta cards (roots)
    ---------------------------------------------------------------- */
 
-.constellationWrap {
-  max-width: 960px;
-  margin: 0 auto;
-}
-
-.constellation {
+.tree {
   position: relative;
   width: 100%;
-  aspect-ratio: 3 / 2;
+  max-width: 960px;
+  margin: 0 auto;
+  display: grid;
+  grid-template-rows: auto 160px auto;
+  gap: 0;
 }
 
-.connections {
-  position: absolute;
-  inset: 0;
+.stem {
+  display: flex;
+  justify-content: center;
+}
+
+.branches {
+  display: block;
   width: 100%;
   height: 100%;
   color: #474747;
   pointer-events: none;
 }
 
-.gridCells {
-  position: relative;
+.roots {
   display: grid;
-  grid-template-columns: repeat(3, 1fr);
-  grid-template-rows: repeat(3, 1fr);
-  width: 100%;
-  height: 100%;
+  grid-template-columns: repeat(8, 1fr);
   gap: 12px;
 }
 
@@ -308,12 +307,13 @@
   background: #0c0c0b;
   border: 1px solid #1f2228;
   border-radius: 0;
-  padding: 16px;
+  padding: 16px 12px;
   display: flex;
   flex-direction: column;
   align-items: center;
   justify-content: center;
   text-align: center;
+  min-height: 96px;
 }
 
 .centerRecord {
@@ -326,6 +326,8 @@
   line-height: 2;
   letter-spacing: 0.1em;
   text-transform: uppercase;
+  width: 200px;
+  padding: 16px;
 }
 
 .centerRecord .recordId {
@@ -339,21 +341,21 @@
 }
 
 .metaCardLabel {
-  font-size: 16px;
-  line-height: 1.5;
+  font-size: 14px;
+  line-height: 1.43;
   letter-spacing: -0.025em;
   font-weight: 400;
   color: #ffffff;
-  margin-bottom: 4px;
+  margin-bottom: 6px;
 }
 
 .metaCardDesc {
   font-family: var(--font-mono), "Space Mono", ui-monospace, "SF Mono", Menlo,
     monospace;
   font-weight: 400;
-  font-size: 12px;
-  line-height: 1.43;
-  letter-spacing: 0.1em;
+  font-size: 11px;
+  line-height: 1.4;
+  letter-spacing: 0.06em;
   color: #7d8187;
 }
 
@@ -378,9 +380,21 @@
 
   .imagePlaceholder { padding: 64px 16px; }
   .recordKey { flex: 0 0 84px; }
-  .constellation { aspect-ratio: 2 / 3; }
-  .gridCells { gap: 8px; }
-  .metaCard, .centerRecord { padding: 12px; }
+
+  /* § 4 tree on mobile: shrink branches band, fold roots to 2×4 */
+  .tree { grid-template-rows: auto 48px auto; }
+  .branches { display: none; }
+  .stem::after {
+    content: "";
+    display: block;
+    width: 1px;
+    height: 48px;
+    margin: 0 auto;
+    background: #474747;
+  }
+  .roots { grid-template-columns: repeat(2, 1fr); gap: 8px; }
+  .centerRecord { width: auto; max-width: 200px; }
+  .metaCard, .centerRecord { padding: 12px; min-height: 80px; }
   .centerRecord .recordId { font-size: 18px; }
-  .metaCardLabel { font-size: 14px; }
+  .metaCardLabel { font-size: 13px; }
 }
