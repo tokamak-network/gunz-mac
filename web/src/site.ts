@@ -5,6 +5,69 @@ export const SITE = {
   githubRepo: process.env.NEXT_PUBLIC_GITHUB_REPO ?? "gunz-mac",
 } as const;
 
+/* ============================================================
+   Studio — Tokamak Games (route: /studio)
+   The top-level brand layer above individual titles.
+   ============================================================ */
+
+export const STUDIO = {
+  name: "Tokamak Games",
+  thesis: "Game for Fun. Blockchain for Glory.",
+  lead:
+    "We build skill-first games where every match becomes a permanent, " +
+    "public record — powered by Play to Glory on Tokamak Network.",
+  chain: "Tokamak Network",
+  social: {
+    discord: "https://discord.gg/tokamak",
+    x: "https://x.com/tokamak_network",
+    github: "https://github.com/tokamak-network",
+  },
+} as const;
+
+export type GameStatus = "live" | "coming-soon" | "in-dev";
+
+export type Game = {
+  slug: string;
+  title: string;
+  tagline: string;
+  genre: string;
+  platform: string;
+  status: GameStatus;
+  href: string;
+  cta: string;
+  flagship?: boolean;
+};
+
+export const STATUS_LABEL: Record<GameStatus, string> = {
+  live: "Live",
+  "coming-soon": "Coming Soon",
+  "in-dev": "In Development",
+};
+
+export const GAMES: Game[] = [
+  {
+    slug: "rivai",
+    title: "RIVAI",
+    tagline: "A new rivalry begins.",
+    genre: "Skill-based PvP",
+    platform: "PC",
+    status: "coming-soon",
+    href: "/",
+    cta: "Get notified",
+    flagship: true,
+  },
+  {
+    slug: "gunz-mac",
+    title: "GunZ Mac",
+    tagline: "GunZ on your Mac in a single double-click.",
+    genre: "Action Shooter",
+    platform: "macOS",
+    status: "live",
+    href: "/download",
+    cta: "Download",
+  },
+];
+
 export type ReleaseInfo = {
   tag: string;
   zipName: string;

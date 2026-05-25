@@ -1,0 +1,586 @@
+/* ============================================================
+   Tokamak Games — studio home (route: /studio)
+   Visual language borrowed from the RIVAI landing (route: /):
+     pure black · glassmorphic rounded pills · bold Inter
+     wide-tracked uppercase labels · soft premium minimal
+   ============================================================ */
+
+.page {
+  background: #000000;
+  color: #ffffff;
+  font-family: var(--rivai-font), Inter, -apple-system, BlinkMacSystemFont,
+    "Apple SD Gothic Neo", system-ui, sans-serif;
+  font-weight: 400;
+  font-size: 16px;
+  line-height: 1.6;
+  color-scheme: dark;
+  min-height: 100vh;
+}
+
+.page a {
+  color: inherit;
+  text-decoration: none;
+}
+
+/* wide-tracked label — the `/` COMING SOON treatment */
+.eyebrow {
+  font-size: 0.75rem;
+  font-weight: 700;
+  letter-spacing: 0.4em;
+  text-transform: uppercase;
+  color: #999999;
+  margin: 0 0 20px;
+}
+
+/* ----------------------------------------------------------------
+   Nav — glassy, blurred, floats over the hero
+   ---------------------------------------------------------------- */
+
+.nav {
+  position: sticky;
+  top: 0;
+  z-index: 50;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 18px 32px;
+  background: rgba(0, 0, 0, 0.4);
+  backdrop-filter: blur(20px);
+  -webkit-backdrop-filter: blur(20px);
+}
+
+.navBrand {
+  display: inline-flex;
+  align-items: center;
+  gap: 9px;
+}
+
+.navMark {
+  display: block;
+  width: 25px;
+  height: 25px;
+  object-fit: contain;
+  /* nudge the ring down a touch to sit naturally against the wordmark */
+  transform: translateY(1px);
+}
+
+.navBrandText {
+  font-size: 15px;
+  font-weight: 700;
+  line-height: 1;
+  letter-spacing: -0.01em;
+}
+
+.navLinks {
+  display: flex;
+  gap: 32px;
+  font-size: 0.75rem;
+  font-weight: 700;
+  letter-spacing: 0.15em;
+  text-transform: uppercase;
+  color: #999999;
+}
+
+.navLinks a {
+  transition: color 160ms ease;
+}
+
+.navLinks a:hover {
+  color: #ffffff;
+}
+
+.navCta {
+  padding: 0.6rem 1.5rem;
+  background: #ffffff;
+  color: #000000 !important;
+  font-size: 0.8rem;
+  font-weight: 900;
+  letter-spacing: 0.05em;
+  border-radius: 100px;
+  transition: transform 0.2s, background-color 0.2s;
+}
+
+.navCta:hover {
+  transform: scale(1.05);
+  background: #eeeeee;
+}
+
+/* ----------------------------------------------------------------
+   Buttons — pills
+   ---------------------------------------------------------------- */
+
+.btnPrimary,
+.btnGhost {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  font-size: 1rem;
+  font-weight: 700;
+  letter-spacing: 0.02em;
+  padding: 1rem 2.2rem;
+  border-radius: 100px;
+  transition: transform 0.2s, background-color 0.2s, border-color 0.2s;
+}
+
+.btnPrimary {
+  background: #ffffff;
+  color: #000000 !important;
+}
+
+.btnPrimary:hover {
+  transform: scale(1.03);
+  background: #eeeeee;
+}
+
+.btnGhost {
+  background: rgba(255, 255, 255, 0.05);
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  color: #ffffff;
+  backdrop-filter: blur(10px);
+  -webkit-backdrop-filter: blur(10px);
+}
+
+.btnGhost:hover {
+  border-color: rgba(255, 255, 255, 0.5);
+  background: rgba(255, 255, 255, 0.1);
+}
+
+/* ----------------------------------------------------------------
+   Hero — flagship first, full-bleed video
+   ---------------------------------------------------------------- */
+
+.hero {
+  position: relative;
+  min-height: calc(100vh - 64px); /* minus nav */
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 96px 24px;
+  overflow: hidden;
+  text-align: center;
+}
+
+.heroMedia {
+  position: absolute;
+  inset: 0;
+  z-index: 0;
+  background: #000;
+}
+
+.heroMedia video {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  transform: scale(1.15);
+  transform-origin: center;
+  transition: opacity 1s ease-in-out;
+}
+
+.heroOverlay {
+  position: absolute;
+  inset: 0;
+  background: radial-gradient(
+    circle at 50% 40%,
+    transparent 0%,
+    rgba(0, 0, 0, 0.85) 100%
+  );
+}
+
+.heroInner {
+  position: relative;
+  z-index: 1;
+  max-width: 900px;
+}
+
+.heroEyebrow {
+  font-size: 1rem;
+  font-weight: 700;
+  letter-spacing: 0.5em;
+  text-transform: uppercase;
+  color: #999999;
+  margin: 0 0 24px;
+}
+
+.heroTitle {
+  font-size: clamp(72px, 16vw, 180px);
+  font-weight: 900;
+  line-height: 0.9;
+  letter-spacing: -0.06em;
+  margin: 0;
+}
+
+.heroTagline {
+  font-size: 1.5rem;
+  line-height: 1.5;
+  color: #999999;
+  margin: 28px 0 0;
+}
+
+.heroStudioline {
+  font-size: 0.95rem;
+  color: #777777;
+  margin: 36px 0 0;
+}
+
+.heroStudioline strong {
+  color: #ffffff;
+  font-weight: 700;
+}
+
+.heroStudioline a {
+  color: #ffffff;
+  text-decoration: underline;
+  text-underline-offset: 3px;
+}
+
+.heroStatus {
+  position: absolute;
+  bottom: 32px;
+  left: 50%;
+  transform: translateX(-50%);
+  z-index: 1;
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  padding: 0.5rem 1.1rem;
+  border-radius: 100px;
+  background: rgba(255, 255, 255, 0.05);
+  border: 1px solid rgba(255, 255, 255, 0.12);
+  backdrop-filter: blur(20px);
+  -webkit-backdrop-filter: blur(20px);
+  font-size: 0.7rem;
+  font-weight: 700;
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+  color: #cccccc;
+}
+
+.statusDot {
+  width: 7px;
+  height: 7px;
+  border-radius: 50%;
+  background: #ff5b3d;
+  box-shadow: 0 0 8px rgba(255, 91, 61, 0.8);
+}
+
+/* ----------------------------------------------------------------
+   Hero email capture — `/` glass pills
+   ---------------------------------------------------------------- */
+
+.notify {
+  margin: 40px 0 0;
+  display: flex;
+  justify-content: center;
+}
+
+.notifyForm {
+  display: flex;
+  gap: 1rem;
+  width: 100%;
+  max-width: 560px;
+}
+
+.notifyInput {
+  flex: 1;
+  min-width: 0;
+  background: rgba(255, 255, 255, 0.05);
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  color: #ffffff;
+  padding: 1.25rem 1.75rem;
+  font-size: 1.05rem;
+  font-family: inherit;
+  border-radius: 100px;
+  backdrop-filter: blur(10px);
+  -webkit-backdrop-filter: blur(10px);
+  outline: none;
+  transition: border-color 0.3s;
+}
+
+.notifyInput::placeholder {
+  color: #888888;
+}
+
+.notifyInput:focus {
+  border-color: rgba(255, 255, 255, 0.5);
+}
+
+.notifySubmit {
+  background: #ffffff;
+  color: #000000;
+  border: none;
+  padding: 1.25rem 2.5rem;
+  font-size: 1.05rem;
+  font-weight: 700;
+  border-radius: 100px;
+  cursor: pointer;
+  white-space: nowrap;
+  font-family: inherit;
+  transition: transform 0.2s, background-color 0.2s;
+}
+
+.notifySubmit:hover:not(:disabled) {
+  transform: scale(1.03);
+  background: #eeeeee;
+}
+
+.notifySubmit:disabled {
+  opacity: 0.6;
+  cursor: default;
+}
+
+.notifySuccess {
+  margin: 40px auto 0;
+  max-width: 560px;
+  background: rgba(255, 255, 255, 0.05);
+  border: 1px solid rgba(255, 255, 255, 0.12);
+  border-radius: 100px;
+  padding: 1.25rem 2rem;
+  font-size: 1.1rem;
+  font-weight: 700;
+  color: #ffffff;
+  text-align: center;
+  backdrop-filter: blur(20px);
+  -webkit-backdrop-filter: blur(20px);
+}
+
+/* ----------------------------------------------------------------
+   Play to Glory — intro + 3 pillars (glass cards)
+   ---------------------------------------------------------------- */
+
+.p2g {
+  max-width: 1080px;
+  margin: 0 auto;
+  padding: 160px 24px;
+  text-align: center;
+}
+
+.p2gQuote {
+  font-size: clamp(40px, 7vw, 76px);
+  font-weight: 800;
+  line-height: 1.05;
+  letter-spacing: -0.04em;
+  margin: 0 auto;
+}
+
+.p2gLead {
+  font-size: 1.25rem;
+  line-height: 1.5;
+  color: #999999;
+  max-width: 560px;
+  margin: 32px auto 0;
+}
+
+.pillars {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 20px;
+  margin-top: 72px;
+  text-align: left;
+}
+
+.pillar {
+  display: flex;
+  flex-direction: column;
+  min-height: 260px;
+  padding: 2rem;
+  background: rgba(255, 255, 255, 0.04);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  border-radius: 24px;
+  backdrop-filter: blur(10px);
+  -webkit-backdrop-filter: blur(10px);
+  transition: transform 0.3s, border-color 0.3s, background-color 0.3s;
+}
+
+.pillar:hover {
+  transform: translateY(-4px);
+  border-color: rgba(255, 255, 255, 0.3);
+  background: rgba(255, 255, 255, 0.07);
+}
+
+.pillarNum {
+  font-size: 0.75rem;
+  font-weight: 700;
+  letter-spacing: 0.25em;
+  color: #777777;
+}
+
+.pillarTitle {
+  font-size: 1.4rem;
+  font-weight: 800;
+  letter-spacing: -0.02em;
+  margin: 1.25rem 0 0;
+}
+
+.pillarLesson {
+  font-size: 1.05rem;
+  line-height: 1.4;
+  color: #ffffff;
+  margin: 0.75rem 0 0;
+}
+
+.pillarDesc {
+  font-size: 0.95rem;
+  line-height: 1.55;
+  color: #999999;
+  margin: 0.75rem 0 0;
+}
+
+.pillarMore {
+  font-size: 0.8rem;
+  font-weight: 700;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: #ffffff;
+  margin-top: auto;
+  padding-top: 1.5rem;
+}
+
+.p2gFooterCta {
+  margin-top: 56px;
+}
+
+/* ----------------------------------------------------------------
+   Community
+   ---------------------------------------------------------------- */
+
+.join {
+  max-width: 1080px;
+  margin: 0 auto;
+  padding: 140px 24px;
+  text-align: center;
+}
+
+.sectionTitle {
+  font-size: clamp(32px, 5vw, 52px);
+  font-weight: 800;
+  line-height: 1.1;
+  letter-spacing: -0.03em;
+  margin: 0;
+}
+
+.lead {
+  font-size: 1.25rem;
+  line-height: 1.5;
+  color: #999999;
+  max-width: 600px;
+  margin: 24px auto 0;
+}
+
+.joinCtas {
+  display: flex;
+  gap: 1rem;
+  flex-wrap: wrap;
+  justify-content: center;
+  margin-top: 40px;
+}
+
+/* ----------------------------------------------------------------
+   Footer
+   ---------------------------------------------------------------- */
+
+.footer {
+  border-top: 1px solid rgba(255, 255, 255, 0.08);
+  padding: 72px 24px 48px;
+  max-width: 1080px;
+  margin: 0 auto;
+}
+
+.footerCols {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 24px;
+}
+
+.footerCol {
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+}
+
+.footerColTitle {
+  font-size: 0.7rem;
+  font-weight: 700;
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+  color: #777777;
+  margin-bottom: 4px;
+}
+
+.footerCol a {
+  font-size: 0.95rem;
+  color: #cccccc;
+  transition: color 160ms ease;
+}
+
+.footerCol a:hover {
+  color: #ffffff;
+}
+
+.footerBottom {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-top: 72px;
+  padding-top: 28px;
+  border-top: 1px solid rgba(255, 255, 255, 0.08);
+}
+
+.footerCopy {
+  font-size: 0.7rem;
+  font-weight: 700;
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+  color: #555555;
+}
+
+/* ----------------------------------------------------------------
+   Mobile
+   ---------------------------------------------------------------- */
+
+@media (max-width: 720px) {
+  .nav {
+    padding: 14px 18px;
+  }
+
+  .navLinks {
+    display: none;
+  }
+
+  .p2g,
+  .join {
+    padding: 90px 18px;
+  }
+
+  .heroTitle {
+    font-size: clamp(64px, 22vw, 120px);
+  }
+
+  .heroEyebrow {
+    font-size: 0.8rem;
+    letter-spacing: 0.35em;
+  }
+
+  .heroTagline {
+    font-size: 1.2rem;
+  }
+
+  .notifyForm {
+    flex-direction: column;
+  }
+
+  .notifyInput,
+  .notifySubmit {
+    border-radius: 28px;
+  }
+
+  .pillars {
+    grid-template-columns: 1fr;
+  }
+
+  .footerCols {
+    grid-template-columns: 1fr 1fr;
+  }
+}

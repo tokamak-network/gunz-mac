@@ -47,7 +47,7 @@ function HeroSection() {
         <hr className={styles.heroDivider} />
 
         <p className={styles.heroNote}>
-          Play to Earn turned games into labor.
+          Play to Earn turned games into work.
           <br />
           Play to Glory makes them count again.
         </p>
@@ -66,7 +66,7 @@ function HeroSection() {
 
 function GameSection() {
   return (
-    <section className={styles.section} data-section="2">
+    <section id="core" className={styles.section} data-section="2">
       <span className={styles.sectionLabel}>§ 02 / The Core</span>
       <div className={styles.content}>
         <p className={styles.eyebrow}>The Core · Game for Fun</p>
@@ -108,7 +108,7 @@ function GameSection() {
 
 function RecordSection() {
   return (
-    <section className={styles.section} data-section="3">
+    <section id="record" className={styles.section} data-section="3">
       <span className={styles.sectionLabel}>§ 03 / The Record</span>
       <div className={styles.content}>
         <p className={styles.eyebrow}>The Record · Blockchain for Glory</p>
@@ -163,28 +163,57 @@ function Row({ k, v }: { k: string; v: React.ReactNode }) {
    Lesson: "From one match, many games grow."
    ============================================================ */
 
-type MetaCard = { label: string; desc: string };
+type MetaCard = { label: string; desc: string; color: string };
 
+/* The Record is gray (neutral witness). Each meta-game that grows from
+   it gets its own color — a different game, a different hue. */
 const META_CARDS: MetaCard[] = [
-  { label: "Odds Market",    desc: "predictions priced on records" },
-  { label: "Ladder",         desc: "ranks computed from records" },
-  { label: "Fan Tokens",     desc: "holders earn on player wins" },
-  { label: "Lore Archive",   desc: "legendary matches, minted" },
-  { label: "Replay Theater", desc: "every record, replayable" },
-  { label: "Guild Score",    desc: "team's aggregate record" },
-  { label: "Tournament",     desc: "brackets seeded by records" },
-  { label: "+",              desc: "community-built" },
+  { label: "Odds Market",    desc: "predictions priced on records", color: "#ffd166" },
+  { label: "Ladder",         desc: "ranks computed from records",   color: "#4cc9f0" },
+  { label: "Fan Tokens",     desc: "holders earn on player wins",   color: "#ef476f" },
+  { label: "Lore Archive",   desc: "legendary matches, minted",     color: "#c77dff" },
+  { label: "Replay Theater", desc: "every record, replayable",      color: "#06d6a0" },
+  { label: "Guild Score",    desc: "team's aggregate record",       color: "#f9844a" },
+  { label: "Tournament",     desc: "brackets seeded by records",    color: "#b5e48c" },
+  { label: "+",              desc: "community-built",               color: "#9aa5b1" },
 ];
 
-/* Card x positions in the SVG viewBox 0..600:
-   8 equal slots, each 75 wide; center of slot N (1-indexed) = (N - 0.5) * 75 */
-const ROOT_X = META_CARDS.map((_, i) => (i + 0.5) * 75);
-const TRUNK_X = 300; // center of viewBox width (600/2)
-const SPLIT_Y = 30;  // where the trunk ends and roots begin
+/* Organic scatter — the Record sits at the center (50,50) and the 8
+   meta-games are strewn around it like leaves off a tree. Positions are
+   hand-placed (% of the canvas) with varying radius so they feel scattered,
+   not ringed; `bow` bends each branch for an organic, limb-like curve. */
+const CENTER = { x: 50, y: 50 };
+
+type Node = { x: number; y: number; bow: number };
+
+const NODES: Node[] = [
+  { x: 15, y: 23, bow: 8 }, // 0 Odds Market
+  { x: 38, y: 10, bow: -7 }, // 1 Ladder
+  { x: 63, y: 14, bow: 6 }, // 2 Fan Tokens
+  { x: 88, y: 33, bow: -8 }, // 3 Lore Archive
+  { x: 82, y: 66, bow: 8 }, // 4 Replay Theater
+  { x: 55, y: 89, bow: -6 }, // 5 Guild Score
+  { x: 26, y: 82, bow: 7 }, // 6 Tournament
+  { x: 10, y: 56, bow: -8 }, // 7 +
+];
+
+/* cubic bezier from the center out to a node, bowed perpendicular by `bow` */
+function branchPath(n: Node): string {
+  const dx = n.x - CENTER.x;
+  const dy = n.y - CENTER.y;
+  const len = Math.hypot(dx, dy) || 1;
+  const px = -dy / len; // perpendicular unit vector
+  const py = dx / len;
+  const c1x = CENTER.x + dx * 0.35 + px * n.bow;
+  const c1y = CENTER.y + dy * 0.35 + py * n.bow;
+  const c2x = CENTER.x + dx * 0.72 + px * n.bow;
+  const c2y = CENTER.y + dy * 0.72 + py * n.bow;
+  return `M ${CENTER.x} ${CENTER.y} C ${c1x} ${c1y}, ${c2x} ${c2y}, ${n.x} ${n.y}`;
+}
 
 function MetaGamesSection() {
   return (
-    <section className={styles.section} data-section="4">
+    <section id="ecosystem" className={styles.section} data-section="4">
       <span className={styles.sectionLabel}>§ 04 / The Ecosystem</span>
       <div className={styles.content}>
         <p className={styles.eyebrow}>The Ecosystem · Meta-games</p>
@@ -197,41 +226,23 @@ function MetaGamesSection() {
           all built on top of the same skill-based matches.
         </p>
 
-        <div className={styles.tree}>
-          {/* stem: record sits at top */}
-          <div className={styles.stem}>
-            <div className={styles.centerRecord}>
-              <div>Record</div>
-              <div className={styles.recordId}>#1,287</div>
-            </div>
-          </div>
-
-          {/* branches: solid trunk line + 8 dashed root curves
-              .root[data-index=N] pairs with .metaCard[data-index=N] for hover */}
+        <div className={styles.canopy}>
+          {/* branches: 8 dashed colored curves from the center Record out to
+              each scattered node. .branch[data-index=N] pairs with the card */}
           <svg
             className={styles.branches}
-            viewBox="0 0 600 100"
+            viewBox="0 0 100 100"
             preserveAspectRatio="none"
             aria-hidden
           >
-            <line
-              className={styles.trunk}
-              x1={TRUNK_X}
-              y1="0"
-              x2={TRUNK_X}
-              y2={SPLIT_Y}
-              stroke="currentColor"
-              strokeWidth="1"
-              vectorEffect="non-scaling-stroke"
-            />
-            {ROOT_X.map((x, i) => (
+            {META_CARDS.map((c, i) => (
               <path
                 key={i}
-                className={styles.root}
+                className={styles.branch}
                 data-index={i}
-                d={`M ${TRUNK_X} ${SPLIT_Y} C ${TRUNK_X} 65 ${x} 80 ${x} 100`}
-                stroke="currentColor"
-                strokeWidth="1"
+                d={branchPath(NODES[i])}
+                stroke={c.color}
+                strokeWidth="1.5"
                 fill="none"
                 strokeDasharray="3 3"
                 vectorEffect="non-scaling-stroke"
@@ -239,19 +250,33 @@ function MetaGamesSection() {
             ))}
           </svg>
 
-          {/* roots: meta-game cards in one row (collapses to 2×4 on mobile) */}
-          <div className={styles.roots}>
-            {META_CARDS.map((c, i) => (
-              <div
-                key={c.label}
-                className={styles.metaCard}
-                data-index={i}
-              >
-                <div className={styles.metaCardLabel}>{c.label}</div>
-                <div className={styles.metaCardDesc}>{c.desc}</div>
-              </div>
-            ))}
+          {/* center Record */}
+          <div
+            className={styles.centerRecord}
+            style={{ left: `${CENTER.x}%`, top: `${CENTER.y}%` }}
+          >
+            <div>Record</div>
+            <div className={styles.recordId}>#1,287</div>
           </div>
+
+          {/* scattered meta-game cards */}
+          {META_CARDS.map((c, i) => (
+            <div
+              key={c.label}
+              className={styles.metaCard}
+              data-index={i}
+              style={
+                {
+                  left: `${NODES[i].x}%`,
+                  top: `${NODES[i].y}%`,
+                  "--c": c.color,
+                } as React.CSSProperties
+              }
+            >
+              <div className={styles.metaCardLabel}>{c.label}</div>
+              <div className={styles.metaCardDesc}>{c.desc}</div>
+            </div>
+          ))}
         </div>
 
         <p className={styles.caption}>

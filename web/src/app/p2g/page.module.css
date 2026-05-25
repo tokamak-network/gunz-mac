@@ -278,60 +278,70 @@
 }
 
 /* ----------------------------------------------------------------
-   § 4  tree — record (stem) ─→ branches ─→ meta cards (roots)
+   § 4  canopy — Record at center, 8 meta-games scattered around it,
+        joined by organic branch curves (tree-like, not a grid)
    ---------------------------------------------------------------- */
 
-.tree {
+.canopy {
   position: relative;
   width: 100%;
-  max-width: 960px;
+  max-width: 920px;
   margin: 0 auto;
-  display: grid;
-  grid-template-rows: auto 160px auto;
-  gap: 0;
+  aspect-ratio: 3 / 2; /* gives the scatter room to breathe */
 }
 
-.stem {
-  display: flex;
-  justify-content: center;
-}
-
-.branches {
-  display: block;
-  width: 100%;
-  height: 100%;
-  color: #474747;
+/* faint glow marking the Record as the source */
+.canopy::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  z-index: 0;
+  background: radial-gradient(
+    circle at 50% 50%,
+    rgba(255, 255, 255, 0.05),
+    transparent 50%
+  );
   pointer-events: none;
 }
 
-.roots {
-  display: grid;
-  grid-template-columns: repeat(8, 1fr);
-  gap: 12px;
+/* branch layer — curves run beneath the floating cards */
+.branches {
+  position: absolute;
+  inset: 0;
+  z-index: 0;
+  width: 100%;
+  height: 100%;
+  pointer-events: none;
 }
 
 .metaCard,
 .centerRecord {
+  position: absolute;
+  transform: translate(-50%, -50%);
+  z-index: 1;
+  width: 152px;
   background: #0c0c0b;
   border: 1px solid #1f2228;
   border-radius: 0;
-  padding: 16px 12px;
+  padding: 16px 14px;
   display: flex;
   flex-direction: column;
   align-items: center;
   justify-content: center;
   text-align: center;
-  min-height: 96px;
   transition: border-color 200ms ease, background-color 200ms ease;
 }
 
 .metaCard:hover {
-  border-color: #ffffff;
+  border-color: var(--c, #ffffff);
   background-color: #1f2228;
 }
 
 .centerRecord {
+  z-index: 2;
+  width: 168px;
   background: #1f2228;
+  border-color: #474747; /* neutral gray — the Record is the colorless source */
   color: #ffffff;
   font-family: var(--font-mono), "Space Mono", ui-monospace, "SF Mono", Menlo,
     monospace;
@@ -340,7 +350,6 @@
   line-height: 2;
   letter-spacing: 0.1em;
   text-transform: uppercase;
-  width: 200px;
   padding: 16px;
 }
 
@@ -348,46 +357,36 @@
   border-color: #ffffff;
 }
 
-/* ── tree hover propagation (CSS :has, no JS) ────────────────────
-   when a meta card is hovered:
-     - all roots dim to opacity 0.2
-     - the matching root brightens to Frost White, opacity 1
-     - the trunk also brightens (record → that card lineage)
-   when the record itself is hovered:
-     - every root and the trunk go Frost White, full opacity
+/* ── canopy hover propagation (CSS :has, no JS) ──────────────────
+   branches carry each meta-game's color at rest;
+   hovering a card dims the rest and isolates its branch;
+   hovering the Record lights every branch at once.
    ──────────────────────────────────────────────────────────────── */
 
-.trunk,
-.root {
-  transition: stroke 200ms ease, opacity 200ms ease;
+.branch {
+  opacity: 0.85;
+  transition: opacity 200ms ease;
 }
 
-.tree:has(.metaCard:hover) .root { opacity: 0.2; }
-.tree:has(.metaCard:hover) .trunk { stroke: #ffffff; }
+.canopy:has(.metaCard:hover) .branch { opacity: 0.12; }
 
-.tree:has(.metaCard[data-index="0"]:hover) .root[data-index="0"],
-.tree:has(.metaCard[data-index="1"]:hover) .root[data-index="1"],
-.tree:has(.metaCard[data-index="2"]:hover) .root[data-index="2"],
-.tree:has(.metaCard[data-index="3"]:hover) .root[data-index="3"],
-.tree:has(.metaCard[data-index="4"]:hover) .root[data-index="4"],
-.tree:has(.metaCard[data-index="5"]:hover) .root[data-index="5"],
-.tree:has(.metaCard[data-index="6"]:hover) .root[data-index="6"],
-.tree:has(.metaCard[data-index="7"]:hover) .root[data-index="7"] {
-  opacity: 1;
-  stroke: #ffffff;
-}
-
-.tree:has(.centerRecord:hover) .trunk,
-.tree:has(.centerRecord:hover) .root {
-  stroke: #ffffff;
+.canopy:has(.metaCard[data-index="0"]:hover) .branch[data-index="0"],
+.canopy:has(.metaCard[data-index="1"]:hover) .branch[data-index="1"],
+.canopy:has(.metaCard[data-index="2"]:hover) .branch[data-index="2"],
+.canopy:has(.metaCard[data-index="3"]:hover) .branch[data-index="3"],
+.canopy:has(.metaCard[data-index="4"]:hover) .branch[data-index="4"],
+.canopy:has(.metaCard[data-index="5"]:hover) .branch[data-index="5"],
+.canopy:has(.metaCard[data-index="6"]:hover) .branch[data-index="6"],
+.canopy:has(.metaCard[data-index="7"]:hover) .branch[data-index="7"] {
   opacity: 1;
 }
+
+.canopy:has(.centerRecord:hover) .branch { opacity: 1; }
 
 @media (prefers-reduced-motion: reduce) {
   .metaCard,
   .centerRecord,
-  .trunk,
-  .root {
+  .branch {
     transition: none;
   }
 }
@@ -407,7 +406,7 @@
   line-height: 1.43;
   letter-spacing: -0.025em;
   font-weight: 400;
-  color: #ffffff;
+  color: var(--c, #ffffff);
   margin-bottom: 6px;
 }
 
@@ -443,20 +442,28 @@
   .imageCardCaption { padding: 10px 12px; font-size: 11px; }
   .recordKey { flex: 0 0 84px; }
 
-  /* § 4 tree on mobile: shrink branches band, fold roots to 2×4 */
-  .tree { grid-template-rows: auto 48px auto; }
+  /* § 4 on mobile: the scatter can't fit — fall back to a flow.
+     Record banner on top, meta-games in a 2-col grid below. */
   .branches { display: none; }
-  .stem::after {
-    content: "";
-    display: block;
-    width: 1px;
-    height: 48px;
-    margin: 0 auto;
-    background: #474747;
+  .canopy {
+    aspect-ratio: auto;
+    max-width: 380px;
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 8px;
   }
-  .roots { grid-template-columns: repeat(2, 1fr); gap: 8px; }
-  .centerRecord { width: auto; max-width: 200px; }
-  .metaCard, .centerRecord { padding: 12px; min-height: 80px; }
+  .canopy::before { display: none; }
+  .metaCard,
+  .centerRecord {
+    position: static;
+    transform: none;
+    width: auto;
+    z-index: auto;
+    padding: 12px 8px;
+    min-height: 92px;
+  }
+  .centerRecord { grid-column: 1 / -1; }
   .centerRecord .recordId { font-size: 18px; }
   .metaCardLabel { font-size: 13px; }
+  .metaCardDesc { font-size: 10px; }
 }
